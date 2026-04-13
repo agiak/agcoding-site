@@ -10,6 +10,7 @@ type ProjectProps = {
   description: string;
   highlights: string[];
   link: string;
+  image?: string;
 };
 
 export interface Props {
@@ -29,6 +30,17 @@ const { className } = Astro.props;
         projects.map((project: ProjectProps) => {
           return (
             <div class="p-6 rounded-2xl border border-box-border bg-box-bg shadow-lg">
+              {
+                project.image && (
+                  <div class="mb-5 rounded-xl overflow-hidden w-full aspect-video flex items-center justify-center bg-box-border">
+                    <img
+                      src={project.image}
+                      alt={`${project.name} screenshot`}
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                )
+              }
               <h3 class="text-heading-1 font-semibold text-xl">{project.name}</h3>
               <Paragraph className="mt-3">{project.description}</Paragraph>
               <div class="mt-4 space-y-3 text-heading-3">

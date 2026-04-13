@@ -1,0 +1,10 @@
+<svg viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg" width="260" height="90">
+  <!-- Accent bar αριστερά -->
+  <rect x="0" y="0" width="5" height="90" rx="2.5" fill="#1D9E75"/>
+  <!-- AG -->
+  <text x="20" y="50" font-family="'Arial Black', Arial, sans-serif" font-size="46" font-weight="900" fill="#0F6E56" letter-spacing="-2">AG</text>
+  <!-- coding -->
+  <text x="20" y="75" font-family="Arial, sans-serif" font-size="22" font-weight="300" fill="#1a1a1a" letter-spacing="8">coding</text>
+  <!-- dot accent στο AG -->
+  <circle cx="110" cy="12" r="5" fill="#5DCAA5"/>
+</svg>

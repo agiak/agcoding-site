@@ -31,6 +31,7 @@ const projects = [
       "Status: Live on Google Play",
     ],
     link: "https://play.google.com/store/apps/details?id=net.honestli.androidapp",
+    image: "/Honestli.jpg",
   },
   {
     name: "Cariboo - Car Management & Tracking App",
@@ -42,6 +43,7 @@ const projects = [
       "Status: Coming Soon",
     ],
     link: "",
+    image: "/Cariboo.png",
   },
 ];
 
