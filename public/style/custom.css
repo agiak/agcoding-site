@@ -1,23 +1,26 @@
 :root {
-  --color-bg: 255 255 255;
+  /* Warm white with a very subtle cream tint — echoes the logo's cream text */
+  --color-bg: 248 246 243;
   --color-border: 255 255 255;
   --color-box: 255 255 255;
-  --box-border: 229 231 235;
-  --box-sd: 226 232 240 / 0.5;
-  --heading-1: 23 37 84;
-  --heading-2: 31 41 55;
-  --heading-3: 55 65 81;
+  --box-border: 210 205 198;
+  --box-sd: 29 78 89 / 0.08;
+  /* Headings use deep teal tones pulled from the logo background */
+  --heading-1: 15 40 50;
+  --heading-2: 25 65 78;
+  --heading-3: 60 100 115;
 }
 
 .dark {
-  --color-bg: 3 7 18;
-  --color-box: 17 24 39;
-  --box-border: 243 244 246/0.1;
+  /* Very dark teal — a near-black version of the logo's background */
+  --color-bg: 8 22 28;
+  --color-box: 14 36 46;
+  --box-border: 240 216 195 / 0.12;
   --box-sd: transparent;
-
-  --heading-1: 255 255 255;
-  --heading-2: 243 244 246;
-  --heading-3: 209 213 219;
+  /* Headings use the warm cream from the logo lettering */
+  --heading-1: 240 216 195;
+  --heading-2: 218 198 175;
+  --heading-3: 185 165 145;
 }
 
 html {
@@ -52,9 +55,5 @@ body {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(35px);
   border-radius: 20px;
-  /* border: 2px solid rgba(255, 255, 255, 0.1); */
   box-shadow: 0 0 80px rgba(0, 0, 0, 0.25);
-  /* padding: 30px 30px 30px 30px; */
 }
-
-

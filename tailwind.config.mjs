@@ -9,7 +9,7 @@ export default {
         "box-bg": "rgb(var(--color-box))",
         "box-shadow": "rgb(var(--box-sd))",
         "box-border": "rgb(var(--box-border))",
-        primary: "#1d4ed8",
+        primary: "#1d4e5a",
         "heading-1": "rgb(var(--heading-1))",
         "heading-2": "rgb(var(--heading-2))",
         "heading-3": "rgb(var(--heading-3))",
