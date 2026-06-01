@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AGcoding — Mobile App Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Outfit:wght@300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F4F6F2;
+    --bg-dark: #1C2419;
+    --bg-mid: #2A3426;
+    --green-deep: #1C2419;
+    --green-mid: #3D5C35;
+    --green-bright: #5A8A4A;
+    --green-light: #8FBF7F;
+    --green-pale: #D4E8CC;
+    --green-wash: #EDF4E9;
+    --ink: #141810;
+    --ink-soft: #3C4438;
+    --ink-muted: #7A8A74;
+    --rule: #D6E2D0;
+    --white: #FFFFFF;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Outfit', sans-serif;
+    --mono: 'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 64px;
+    transition: background 0.4s, border-color 0.4s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: rgba(244,246,242,0.92);
+    backdrop-filter: blur(16px);
+    border-color: var(--rule);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green-bright);
+  }
+
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--green-deep);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 12px 28px;
+    text-decoration: none;
+    transition: background 0.25s;
+  }
+  .nav-cta:hover { background: var(--green-mid); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--bg-dark);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 64px 80px;
+  }
+
+  /* subtle grid texture */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(90,138,74,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(90,138,74,0.07) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+  }
+
+  /* large bg text */
+  .hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--serif);
+    font-size: clamp(120px, 16vw, 220px);
+    font-weight: 500;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(90,138,74,0.12);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-badge {
+    position: absolute;
+    top: 140px;
+    right: 64px;
+    border: 1px solid rgba(143,191,127,0.3);
+    padding: 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 220px;
+  }
+  .badge-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 8px;
+  }
+  .badge-stat {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: #fff;
+    line-height: 1;
+    font-weight: 400;
+  }
+  .badge-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+  }
+
+  .hero-top {
+    position: absolute;
+    top: 32px;
+    left: 64px;
+    right: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--green-light);
+  }
+
+  .hero-scroll {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    writing-mode: vertical-rl;
+    position: absolute;
+    right: 30px;
+    bottom: 80px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-scroll::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .hero-headline {
+    font-family: var(--serif);
+    font-size: clamp(56px, 7vw, 100px);
+    font-weight: 400;
+    line-height: 1.0;
+    color: #fff;
+    letter-spacing: -0.02em;
+    max-width: 780px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .hero-headline em {
+    font-style: italic;
+    color: var(--green-light);
+  }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    max-width: 380px;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  .btn-hero {
+    background: var(--green-bright);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    text-decoration: none;
+    transition: background 0.25s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-hero:hover { background: var(--green-mid); transform: translateY(-2px); }
+
+  .btn-outline-hero {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .btn-outline-hero:hover { color: var(--green-light); }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--green-deep);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(90,138,74,0.2);
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    padding: 0 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    opacity: 0.7;
+  }
+  .marquee-sep {
+    width: 4px; height: 4px;
+    background: var(--green-bright);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── SECTIONS ── */
+  .section { padding: 120px 64px; }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--green-mid);
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(38px, 4vw, 58px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .section-title em { font-style: italic; color: var(--green-mid); }
+
+  /* ── ABOUT STRIP ── */
+  .about-strip {
+    background: var(--green-wash);
+    padding: 72px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .about-item {
+    padding: 0 40px;
+    border-right: 1px solid var(--rule);
+  }
+  .about-item:first-child { padding-left: 0; }
+  .about-item:last-child { border-right: none; }
+
+  .about-num {
+    font-family: var(--serif);
+    font-size: 52px;
+    font-weight: 400;
+    color: var(--green-mid);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .about-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .about-text {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  /* ── SERVICES ── */
+  .services-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    margin-top: 72px;
+  }
+
+  .services-intro {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    padding-top: 8px;
+  }
+
+  .services-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .service-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    padding: 48px;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--green-bright);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s;
+  }
+  .service-card:hover { border-color: var(--green-pale); box-shadow: 0 8px 32px rgba(61,92,53,0.08); }
+  .service-card:hover::before { transform: scaleY(1); }
+
+  .service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .service-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--green-bright);
+  }
+
+  .service-arrow {
+    font-size: 18px;
+    color: var(--rule);
+    transition: color 0.2s, transform 0.2s;
+  }
+  .service-card:hover .service-arrow { color: var(--green-mid); transform: translate(3px, -3px); }
+
+  .service-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .service-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--green-mid);
+    background: var(--green-wash);
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-section {
+    background: var(--bg-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .projects-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(90,138,74,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(90,138,74,0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+  .projects-section .section-eyebrow { color: var(--green-light); }
+  .projects-section .section-eyebrow::before { background: var(--green-light); }
+  .projects-section .section-title { color: #fff; }
+  .projects-section .section-title em { color: var(--green-light); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 72px;
+    position: relative;
+  }
+
+  .project-card {
+    border: 1px solid rgba(90,138,74,0.15);
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+    background: rgba(255,255,255,0.02);
+  }
+  .project-card:hover {
+    border-color: rgba(90,138,74,0.4);
+    background: rgba(90,138,74,0.05);
+  }
+
+  .project-index {
+    font-family: var(--mono);
+    font-size: 80px;
+    font-weight: 400;
+    color: rgba(90,138,74,0.08);
+    position: absolute;
+    top: 24px; right: 32px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .project-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-live { color: var(--green-light); }
+  .status-soon { color: rgba(255,255,255,0.3); }
+
+  .status-indicator {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .status-live .status-indicator {
+    background: var(--green-light);
+    box-shadow: 0 0 8px var(--green-bright);
+    animation: glow 2s infinite;
+  }
+  @keyframes glow { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .status-soon .status-indicator { background: rgba(255,255,255,0.2); }
+
+  .project-title {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+
+  .project-meta {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 36px;
+  }
+  .meta-item { }
+  .meta-key {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .meta-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green-light);
+    letter-spacing: 0.04em;
+  }
+
+  .project-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(143,191,127,0.3);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .project-link:hover { color: var(--green-light); border-color: var(--green-light); }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--green-mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(90,138,74,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+
+  .contact-title {
+    font-family: var(--serif);
+    font-size: clamp(44px, 5vw, 68px);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+  }
+  .contact-title em { font-style: italic; color: var(--green-pale); }
+
+  .contact-text {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin-bottom: 48px;
+    max-width: 380px;
+  }
+
+  .contact-email {
+    font-family: var(--serif);
+    font-size: 24px;
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-email:hover { border-color: var(--green-pale); color: var(--green-pale); }
+
+  .contact-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .contact-item {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .contact-item:first-child { border-top: 1px solid rgba(255,255,255,0.1); }
+
+  .contact-item-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+  .contact-item-val {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--green-pale);
+    font-weight: 400;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg-dark);
+    padding: 32px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(90,138,74,0.15);
+  }
+
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .footer-logo-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green-bright);
+  }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── REVEALS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--green-bright); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#home" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    AGcoding
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Start a project</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-text">AGcoding</div>
+
+  <div class="hero-badge reveal" style="transition-delay:0.4s">
+    <div class="badge-label">Studio Output</div>
+    <div class="badge-stat">2</div>
+    <div class="badge-sub">Apps live on store</div>
+    <div class="badge-stat" style="font-size:24px">Native</div>
+    <div class="badge-sub">Only approach</div>
+  </div>
+
+  <div class="hero-tag" style="position:absolute;top:140px;left:64px;">
+    Mobile Development Studio
+  </div>
+
+  <div class="hero-scroll">Scroll</div>
+
+  <h1 class="hero-headline reveal">
+    We build apps<br>that people <em>actually</em><br>want to use.
+  </h1>
+
+  <div class="hero-bottom reveal" style="transition-delay:0.2s">
+    <p class="hero-sub">
+      AGcoding is a small, experienced team delivering native Android and iOS applications — from concept through to store submission.
+    </p>
+    <div class="hero-cta-group">
+      <a href="#contact" class="btn-hero">Start a project</a>
+      <a href="#projects" class="btn-outline-hero">See our work &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-sep"></span>Android Development</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>iOS Development</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Google Play</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>App Store</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Native Performance</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>End-to-end Delivery</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Kotlin &amp; Swift</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Startup &amp; Enterprise</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Android Development</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>iOS Development</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Google Play</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>App Store</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Native Performance</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>End-to-end Delivery</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Kotlin &amp; Swift</span>
+    <span class="marquee-item"><span class="marquee-sep"></span>Startup &amp; Enterprise</span>
+  </div>
+</div>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-item reveal">
+    <div class="about-num">100%</div>
+    <div class="about-label">Native only</div>
+    <div class="about-text">No React Native, no Flutter shortcuts. Pure Android and iOS code for maximum performance and quality.</div>
+  </div>
+  <div class="about-item reveal" style="transition-delay:0.1s">
+    <div class="about-num">2</div>
+    <div class="about-label">Live on store</div>
+    <div class="about-text">Real apps, real users. From concept to Google Play and App Store — we own the full delivery lifecycle.</div>
+  </div>
+  <div class="about-item reveal" style="transition-delay:0.2s">
+    <div class="about-num">2</div>
+    <div class="about-label">Service models</div>
+    <div class="about-text">Full project ownership or part-time collaboration with your existing team. Flexible by design.</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-eyebrow reveal">Services</div>
+  <h2 class="section-title reveal">How we <em>work</em></h2>
+  <div class="services-layout">
+    <div class="services-intro reveal">
+      We keep it simple: two ways to work with us, both focused on delivering real, high-quality native mobile applications.
+    </div>
+    <div class="services-cards">
+      <div class="service-card reveal">
+        <div class="service-header">
+          <span class="service-num">01</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <h3 class="service-title">Full Project Development</h3>
+        <p class="service-desc">We take on your mobile app from scratch — end-to-end. From requirements and architecture all the way through to store submission. Ideal for startups and businesses that need a complete mobile solution.</p>
+        <div class="service-tags">
+          <span class="service-tag">Requirements</span>
+          <span class="service-tag">Architecture</span>
+          <span class="service-tag">Native Dev</span>
+          <span class="service-tag">Store Submission</span>
+          <span class="service-tag">Post-launch</span>
+        </div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.1s">
+        <div class="service-header">
+          <span class="service-num">02</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <h3 class="service-title">Part-time Team Collaboration</h3>
+        <p class="service-desc">We integrate directly with your existing team, providing dedicated Android or iOS development hours. Extra mobile capacity without the overhead of a full-time hire — no recruitment, no management overhead.</p>
+        <div class="service-tags">
+          <span class="service-tag">Android</span>
+          <span class="service-tag">iOS</span>
+          <span class="service-tag">Flexible hours</span>
+          <span class="service-tag">Team integration</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section projects-section" id="projects">
+  <div class="section-eyebrow reveal">Work</div>
+  <h2 class="section-title reveal">Recent <em>projects</em></h2>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-index">01</div>
+      <div class="project-status status-live">
+        <span class="status-indicator"></span>
+        Live on Google Play
+      </div>
+      <h3 class="project-title">Honestli</h3>
+      <p class="project-desc">A digital verification platform built to combat misinformation. Implements tamper-proof Digital Originals with C2PA metadata and blockchain anchoring.</p>
+      <div class="project-meta">
+        <div class="meta-item">
+          <span class="meta-key">Platform</span>
+          <span class="meta-val">Android</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Category</span>
+          <span class="meta-val">Verification</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Status</span>
+          <span class="meta-val">Live</span>
+        </div>
+      </div>
+      <a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" class="project-link" target="_blank">View on Play Store &rarr;</a>
+    </div>
+    <div class="project-card reveal" style="transition-delay:0.1s">
+      <div class="project-index">02</div>
+      <div class="project-status status-soon">
+        <span class="status-indicator"></span>
+        Coming Soon
+      </div>
+      <h3 class="project-title">Cariboo</h3>
+      <p class="project-desc">A feature-rich car management app for tracking fuel, expenses, and vehicle costs. Features an interactive statistics dashboard and AI-assisted workflows.</p>
+      <div class="project-meta">
+        <div class="meta-item">
+          <span class="meta-key">Platform</span>
+          <span class="meta-val">Android</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Category</span>
+          <span class="meta-val">Productivity</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Status</span>
+          <span class="meta-val">In dev</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="section-eyebrow" style="color:var(--green-pale)">
+        <span style="background:var(--green-pale)"></span>
+        Contact
+      </div>
+      <h2 class="contact-title">Let's build<br>something <em>real.</em></h2>
+      <p class="contact-text">Have a project in mind? We support full app delivery or can collaborate directly with your team. No fluff — just reliable native mobile development.</p>
+      <a href="mailto:agcodinglp@gmail.com" class="contact-email">agcodinglp@gmail.com</a>
+    </div>
+    <div class="contact-right reveal" style="transition-delay:0.15s">
+      <div class="contact-item">
+        <span class="contact-item-label">Approach</span>
+        <span class="contact-item-val">Native only</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Delivery</span>
+        <span class="contact-item-val">End-to-end</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Engagement</span>
+        <span class="contact-item-val">Flexible</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Platforms</span>
+        <span class="contact-item-val">Android &amp; iOS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <span class="footer-logo-dot"></span>
+    AGcoding — Mobile Studio
+  </div>
+  <div class="footer-copy">&copy; 2026 AGcoding. All rights reserved.</div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  setTimeout(() => {
+    reveals.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 80);
+</script>
+</body>
+</html>
