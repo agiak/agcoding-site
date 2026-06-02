@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AGcoding — Mobile App Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #F5F4F0;
+    --black: #0A0A0A;
+    --red:   #FF2D00;
+    --grey:  #777777;
+    --grey-light: #CACACA;
+    --cond: 'Barlow Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--black);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: stretch; justify-content: space-between;
+    height: 56px;
+    background: var(--paper);
+    border-bottom: 2px solid var(--black);
+  }
+
+  .nav-logo {
+    font-family: var(--cond);
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--black);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    border-right: 1px solid var(--black);
+  }
+  .nav-logo .slash { color: var(--red); margin: 0 3px; }
+
+  .nav-links {
+    display: flex; gap: 0; list-style: none;
+    flex: 1;
+    justify-content: center;
+  }
+  .nav-links li { display: flex; align-items: stretch; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey);
+    text-decoration: none;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-links a:hover { background: var(--black); color: var(--paper); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--red);
+    color: white;
+    text-decoration: none;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid var(--black);
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .nav-cta:hover { background: #cc2400; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    padding-top: 56px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    border-bottom: 2px solid var(--black);
+  }
+
+  .hero-band {
+    border-bottom: 1px solid var(--black);
+    padding: 10px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero-band-left {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .hero-band-right {
+    display: flex;
+    gap: 48px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .hero-band-right em { color: var(--black); font-style: normal; }
+
+  .hero-main {
+    display: grid;
+    grid-template-columns: 1fr 3px 1fr;
+  }
+
+  .hero-divider-v { background: var(--black); }
+
+  .hero-left {
+    padding: 56px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .hero-index {
+    font-family: var(--cond);
+    font-size: clamp(140px, 20vw, 280px);
+    font-weight: 900;
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(0,0,0,0.12);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .hero-right {
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .hero-headline {
+    font-family: var(--cond);
+    font-size: clamp(68px, 9vw, 140px);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+  .hero-headline .outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--black);
+  }
+  .hero-headline .red { color: var(--red); }
+
+  .hero-body-row {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .hero-desc {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--grey);
+    max-width: 400px;
+    line-height: 1.75;
+  }
+
+  .hero-actions { display: flex; gap: 0; }
+
+  .btn-brutal {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .btn-fill {
+    background: var(--black);
+    color: var(--paper);
+    border: 2px solid var(--black);
+  }
+  .btn-fill:hover { background: var(--red); border-color: var(--red); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--black);
+    border: 2px solid var(--black);
+    border-left: 0;
+  }
+  .btn-ghost:hover { background: var(--black); color: var(--paper); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    border-top: 2px solid var(--black);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-item {
+    padding: 24px 32px;
+    border-right: 1px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-item:last-child { border-right: 0; }
+  .stat-n {
+    font-family: var(--cond);
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--black);
+  }
+  .stat-n .red { color: var(--red); }
+  .stat-lbl {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    background: var(--black);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: inline-flex;
+    animation: ticker 22s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(245,244,240,0.5);
+    padding: 0 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .ticker-sep { color: var(--red); }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION BASE ── */
+  .section {
+    padding: 72px 32px;
+    border-bottom: 2px solid var(--black);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 48px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--black);
+  }
+  .section-num {
+    font-family: var(--cond);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .section-title {
+    font-family: var(--cond);
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── SERVICES TABLE ── */
+  .services-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid var(--black);
+  }
+  .services-table tr { border-bottom: 1px solid var(--black); }
+  .services-table tr:last-child { border-bottom: 0; }
+  .services-table td {
+    padding: 32px;
+    vertical-align: top;
+    border-right: 1px solid var(--black);
+  }
+  .services-table td:last-child { border-right: 0; }
+
+  .td-num { width: 72px; }
+  .svc-num-big {
+    font-family: var(--cond);
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--grey-light);
+    line-height: 1;
+  }
+
+  .td-title { width: 260px; }
+  .svc-title {
+    font-family: var(--cond);
+    font-size: 30px;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.0;
+    margin-bottom: 8px;
+  }
+  .svc-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .svc-desc {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.75;
+    max-width: 360px;
+    font-weight: 300;
+  }
+
+  .svc-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .svc-list li {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--grey);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .svc-list li::before { content: '→'; color: var(--red); font-size: 12px; }
+
+  /* ── PROJECTS ── */
+  .projects-section {
+    background: var(--black);
+    border-bottom: 2px solid var(--black);
+  }
+
+  .projects-head {
+    padding: 40px 32px 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .projects-head .section-num { color: var(--red); }
+  .projects-head .section-title { color: var(--paper); }
+  .projects-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 1fr auto;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    align-items: stretch;
+    transition: background 0.18s;
+  }
+  .project-row:hover { background: rgba(255,45,0,0.04); }
+  .project-row:last-child { border-bottom: 0; }
+
+  .pr-num {
+    font-family: var(--cond);
+    font-size: 56px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    padding: 28px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    line-height: 1;
+  }
+  .pr-main {
+    padding: 36px 32px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+  .pr-status {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pr-status.live { color: #00FF87; }
+  .pr-status.soon { color: rgba(255,255,255,0.22); }
+  .pr-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .live .pr-dot { background: #00FF87; animation: pr-blink 1.8s infinite; }
+  .soon .pr-dot { background: rgba(255,255,255,0.18); }
+  @keyframes pr-blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .pr-title {
+    font-family: var(--cond);
+    font-size: 52px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: white;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  .pr-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.38);
+    line-height: 1.72;
+    max-width: 400px;
+    font-weight: 300;
+  }
+
+  .pr-meta {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    justify-content: center;
+  }
+  .pr-meta-key {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .pr-meta-val {
+    font-family: var(--cond);
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.02em;
+  }
+  .pr-meta-val.green { color: #00FF87; }
+
+  .pr-action {
+    padding: 36px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-project {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 12px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .btn-project:hover { border-color: var(--red); background: rgba(255,45,0,0.1); color: var(--red); }
+  .btn-project.disabled {
+    color: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.08);
+    cursor: default;
+  }
+  .btn-project.disabled:hover { background: none; color: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.08); }
+
+  /* ── CONTACT ── */
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 380px;
+    border-bottom: 2px solid var(--black);
+  }
+
+  .contact-left {
+    padding: 72px 32px;
+    border-right: 2px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .contact-section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+  }
+  .contact-headline {
+    font-family: var(--cond);
+    font-size: clamp(56px, 7vw, 100px);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+  }
+  .contact-headline .outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--black);
+  }
+  .contact-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.75;
+    max-width: 400px;
+    margin-top: 20px;
+    font-weight: 300;
+  }
+  .contact-email-block { margin-top: 48px; }
+  .contact-email-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 8px;
+  }
+  .contact-email-link {
+    font-family: var(--cond);
+    font-size: clamp(22px, 2.8vw, 38px);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--black);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    border-bottom: 3px solid var(--red);
+    padding-bottom: 4px;
+    display: inline-block;
+    transition: color 0.2s;
+  }
+  .contact-email-link:hover { color: var(--red); }
+
+  .contact-right {
+    background: var(--black);
+    padding: 72px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .contact-right-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 32px;
+  }
+  .fact-list { display: flex; flex-direction: column; }
+  .fact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .fact-row:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+  .fact-key {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+  }
+  .fact-val {
+    font-family: var(--cond);
+    font-size: 20px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: white;
+    letter-spacing: 0.01em;
+  }
+  .fact-val.accent { color: var(--red); }
+
+  .cta-block { margin-top: 36px; }
+  .btn-cta {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--red);
+    color: white;
+    text-decoration: none;
+    padding: 16px 32px;
+    display: inline-block;
+    transition: background 0.15s;
+  }
+  .btn-cta:hover { background: #cc2400; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: var(--cond);
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+  .footer-logo .slash { color: var(--red); }
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+
+  /* ── REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">AG<span class="slash">/</span>Coding</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Start a project &rarr;</a>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+
+  <div class="hero-band">
+    <span class="hero-band-left">Mobile Development Studio — Est. 2024</span>
+    <div class="hero-band-right">
+      <span>Android <em>+</em> iOS</span>
+      <span>Native <em>Only</em></span>
+      <span>Concept to <em>Store</em></span>
+    </div>
+  </div>
+
+  <div class="hero-main">
+    <div class="hero-left">
+      <div class="hero-index">01</div>
+      <div class="hero-tag">Mobile Development Studio</div>
+    </div>
+    <div class="hero-divider-v"></div>
+    <div class="hero-right">
+      <h1 class="hero-headline">
+        <span class="outline">Native</span><br>
+        Apps<br>
+        <span class="red">Done</span><br>
+        Right.
+      </h1>
+      <div class="hero-body-row">
+        <p class="hero-desc">AGcoding is a lean, experienced team delivering native Android and iOS applications — from concept through to store submission. No shortcuts, no cross-platform compromises.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn-brutal btn-fill">Start a project</a>
+          <a href="#projects" class="btn-brutal btn-ghost">See our work</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-n">2<span class="red">+</span></div>
+      <div class="stat-lbl">Apps live on store</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">100<span class="red">%</span></div>
+      <div class="stat-lbl">Native development only</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n"><span class="red">E2E</span></div>
+      <div class="stat-lbl">Full project delivery</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">0<span class="red">×</span></div>
+      <div class="stat-lbl">Cross-platform shortcuts</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">Android Development <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">iOS Development <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Google Play Submission <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">App Store Submission <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Kotlin &amp; Swift <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Native Performance <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">End-to-end Delivery <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">No Cross-Platform <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Android Development <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">iOS Development <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Google Play Submission <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">App Store Submission <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Kotlin &amp; Swift <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">Native Performance <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">End-to-end Delivery <span class="ticker-sep">/</span></span>
+    <span class="ticker-item">No Cross-Platform <span class="ticker-sep">/</span></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-header reveal">
+    <span class="section-num">02 —</span>
+    <h2 class="section-title">How We Work</h2>
+  </div>
+  <table class="services-table reveal" style="transition-delay:0.05s">
+    <tr>
+      <td class="td-num"><div class="svc-num-big">01</div></td>
+      <td class="td-title">
+        <div class="svc-title">Full Project<br>Development</div>
+        <div class="svc-sub">Concept to launch</div>
+      </td>
+      <td>
+        <p class="svc-desc">We take on your mobile app project from scratch — end-to-end. From requirements and architecture through to store submission. No hand-offs, no surprises, no excuses.</p>
+      </td>
+      <td>
+        <ul class="svc-list">
+          <li>Requirements &amp; architecture</li>
+          <li>Native Android &amp; iOS dev</li>
+          <li>Google Play &amp; App Store</li>
+          <li>Post-launch support</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td class="td-num"><div class="svc-num-big">02</div></td>
+      <td class="td-title">
+        <div class="svc-title">Team<br>Collaboration</div>
+        <div class="svc-sub">Part-time integration</div>
+      </td>
+      <td>
+        <p class="svc-desc">We integrate directly with your existing team, providing dedicated Android or iOS development hours without the overhead and delay of a full-time hire.</p>
+      </td>
+      <td>
+        <ul class="svc-list">
+          <li>Dedicated dev hours</li>
+          <li>Seamless team integration</li>
+          <li>Flexible engagement model</li>
+          <li>Android &amp; iOS specialists</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="projects-head reveal">
+    <div style="display:flex;align-items:baseline;gap:20px">
+      <span class="section-num">03 —</span>
+      <h2 class="section-title">Recent Work</h2>
+    </div>
+    <span class="projects-count">02 projects</span>
+  </div>
+  <div class="project-row reveal">
+    <div class="pr-num">01</div>
+    <div class="pr-main">
+      <div class="pr-status live"><span class="pr-dot"></span>Live on Google Play</div>
+      <div class="pr-title">Honestli</div>
+      <p class="pr-desc">A digital verification platform built to combat misinformation. Implements tamper-proof Digital Originals with C2PA metadata and blockchain anchoring.</p>
+    </div>
+    <div class="pr-meta">
+      <div>
+        <span class="pr-meta-key">Platform</span>
+        <span class="pr-meta-val">Android</span>
+      </div>
+      <div>
+        <span class="pr-meta-key">Category</span>
+        <span class="pr-meta-val">Verification</span>
+      </div>
+      <div>
+        <span class="pr-meta-key">Status</span>
+        <span class="pr-meta-val green">Live</span>
+      </div>
+    </div>
+    <div class="pr-action">
+      <a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" class="btn-project" target="_blank">Play Store &rarr;</a>
+    </div>
+  </div>
+  <div class="project-row reveal" style="transition-delay:0.1s">
+    <div class="pr-num">02</div>
+    <div class="pr-main">
+      <div class="pr-status soon"><span class="pr-dot"></span>In Development</div>
+      <div class="pr-title">Cariboo</div>
+      <p class="pr-desc">A feature-rich car management app for tracking fuel, expenses, and vehicle costs. Features an interactive statistics dashboard and AI-assisted workflows.</p>
+    </div>
+    <div class="pr-meta">
+      <div>
+        <span class="pr-meta-key">Platform</span>
+        <span class="pr-meta-val">Android</span>
+      </div>
+      <div>
+        <span class="pr-meta-key">Category</span>
+        <span class="pr-meta-val">Productivity</span>
+      </div>
+      <div>
+        <span class="pr-meta-key">Status</span>
+        <span class="pr-meta-val" style="color:rgba(255,255,255,0.28)">In dev</span>
+      </div>
+    </div>
+    <div class="pr-action">
+      <a class="btn-project disabled">Coming Soon</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-left reveal">
+      <div>
+        <div class="contact-section-label">04 — Contact</div>
+        <h2 class="contact-headline">
+          Let's<br>
+          <span class="outline">Build</span><br>
+          Together.
+        </h2>
+        <p class="contact-desc">Have a project in mind? We support full app delivery or can collaborate directly with your existing team. No fluff — just reliable native mobile development.</p>
+      </div>
+      <div class="contact-email-block">
+        <div class="contact-email-label">Direct line</div>
+        <a href="mailto:agcodinglp@gmail.com" class="contact-email-link">agcodinglp@gmail.com</a>
+      </div>
+    </div>
+    <div class="contact-right reveal" style="transition-delay:0.15s">
+      <div class="contact-right-label">What to expect</div>
+      <div class="fact-list">
+        <div class="fact-row">
+          <span class="fact-key">Approach</span>
+          <span class="fact-val accent">Native only</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-key">Delivery</span>
+          <span class="fact-val">End-to-end</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-key">Engagement</span>
+          <span class="fact-val">Flexible</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-key">Platforms</span>
+          <span class="fact-val">Android + iOS</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-key">Cross-platform</span>
+          <span class="fact-val accent">Never.</span>
+        </div>
+      </div>
+      <div class="cta-block">
+        <a href="mailto:agcodinglp@gmail.com" class="btn-cta">Get in touch &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">AG<span class="slash">/</span>Coding — Mobile Studio</div>
+  <div class="footer-copy">&copy; 2026 AGcoding. All rights reserved.</div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05 });
+  reveals.forEach(el => io.observe(el));
+  setTimeout(() => {
+    reveals.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 80);
+</script>
+</body>
+</html>

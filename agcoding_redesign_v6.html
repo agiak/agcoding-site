@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AGcoding — Mobile App Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white:   #FFFFFF;
+    --bg:      #F7F8FC;
+    --bg2:     #EEF0F8;
+    --night:   #050D1A;
+    --navy:    #0F1D35;
+    --slate:   #5A6B82;
+    --slate-l: #98A8BC;
+    --rule:    #E0E6F0;
+    --violet:  #5B3FE8;
+    --violet-l: #7B62FF;
+    --violet-d: #3D28C0;
+    --violet-p: #EDE8FF;
+    --violet-w: #F6F3FF;
+    --green:   #00C07F;
+    --sans:    'Plus Jakarta Sans', sans-serif;
+    --mono:    'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--night);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+  }
+  .nav-inner {
+    width: 100%;
+    max-width: 1160px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 0 24px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05), 0 0 0 0 rgba(91,63,232,0);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled .nav-inner {
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  }
+
+  .nav-logo {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--night);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .nav-logo-mark {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--violet), var(--violet-l));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.04em;
+    flex-shrink: 0;
+  }
+
+  .nav-links {
+    display: flex; gap: 4px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--slate);
+    text-decoration: none;
+    padding: 7px 14px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { background: var(--bg2); color: var(--night); }
+
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--violet), var(--violet-l));
+    color: white;
+    text-decoration: none;
+    padding: 9px 20px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 3px 10px rgba(91,63,232,0.28);
+  }
+  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(91,63,232,0.38); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    padding-top: 108px;
+    padding-bottom: 80px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-orb-1 {
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(91,63,232,0.1) 0%, transparent 65%);
+    top: -200px; right: -100px;
+    pointer-events: none;
+  }
+  .hero-orb-2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(91,63,232,0.06) 0%, transparent 65%);
+    bottom: -100px; left: -80px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--violet-p);
+    color: var(--violet);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 13px 5px 8px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    letter-spacing: 0.01em;
+    border: 1px solid rgba(91,63,232,0.15);
+  }
+  .hero-pill-dot {
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg, var(--violet), var(--violet-l));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+
+  .hero-headline {
+    font-size: clamp(38px, 4.8vw, 68px);
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    color: var(--night);
+    margin-bottom: 20px;
+  }
+  .grad {
+    background: linear-gradient(135deg, var(--violet) 0%, #9B72FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--slate);
+    line-height: 1.75;
+    max-width: 440px;
+    margin-bottom: 36px;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .btn-primary {
+    font-size: 14px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--violet), var(--violet-l));
+    color: white;
+    text-decoration: none;
+    padding: 13px 26px;
+    border-radius: 11px;
+    box-shadow: 0 4px 14px rgba(91,63,232,0.32);
+    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 22px rgba(91,63,232,0.4); }
+
+  .btn-secondary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--slate);
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 11px;
+    border: 1px solid var(--rule);
+    background: white;
+    transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn-secondary:hover { border-color: rgba(91,63,232,0.3); color: var(--violet); box-shadow: 0 4px 14px rgba(91,63,232,0.08); }
+
+  .hero-tech-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .tech-label {
+    font-size: 12px;
+    color: var(--slate-l);
+    font-weight: 500;
+  }
+  .tech-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--slate);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── HERO VISUAL ── */
+  .hero-visual {
+    position: relative;
+    height: 520px;
+  }
+
+  /* Phone mockups */
+  .phone {
+    position: absolute;
+    background: var(--night);
+    border-radius: 32px;
+    border: 7px solid #1C2D45;
+    box-shadow: 0 32px 64px rgba(5,13,26,0.28), 0 0 0 1px rgba(255,255,255,0.04);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-notch {
+    width: 72px; height: 18px;
+    background: #1C2D45;
+    border-radius: 0 0 12px 12px;
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+  .phone-screen { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 7px; overflow: hidden; }
+
+  .phone-main {
+    width: 220px; height: 440px;
+    top: 40px; left: 50%; transform: translateX(-50%);
+    z-index: 2;
+  }
+  .phone-back-l {
+    width: 190px; height: 360px;
+    top: 80px; left: 4px;
+    z-index: 1;
+    opacity: 0.55;
+    transform: rotate(-6deg);
+    filter: blur(1.5px);
+  }
+  .phone-back-r {
+    width: 190px; height: 360px;
+    top: 90px; right: 0;
+    z-index: 1;
+    opacity: 0.45;
+    transform: rotate(7deg);
+    filter: blur(2px);
+  }
+
+  .ps-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+  .ps-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.88); }
+  .ps-dot { width: 20px; height: 20px; border-radius: 6px; background: linear-gradient(135deg, var(--violet), var(--violet-l)); }
+
+  .ps-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 9px;
+    padding: 9px;
+  }
+  .ps-card-label { font-size: 7px; color: rgba(255,255,255,0.3); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+  .ps-card-val { font-size: 15px; font-weight: 800; color: white; letter-spacing: -0.02em; }
+  .ps-bar-wrap { margin-top: 6px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+  .ps-bar { height: 100%; background: linear-gradient(90deg, var(--violet), var(--violet-l)); border-radius: 2px; }
+
+  .ps-row { display: flex; gap: 6px; }
+  .ps-mini {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 7px;
+    padding: 7px;
+  }
+  .ps-mini-label { font-size: 6px; color: rgba(255,255,255,0.25); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+  .ps-mini-val { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.75); }
+
+  /* Floating badge */
+  .float-badge {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    z-index: 3;
+    white-space: nowrap;
+  }
+  .fb-1 { bottom: 60px; left: -16px; }
+  .fb-2 { top: 40px; right: -12px; }
+  .fb-icon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .fb-icon-g { background: linear-gradient(135deg, #00C07F, #00966A); }
+  .fb-icon-v { background: linear-gradient(135deg, var(--violet), var(--violet-l)); }
+  .fb-main { font-size: 12px; font-weight: 700; color: var(--night); }
+  .fb-sub  { font-size: 10px; color: var(--slate); }
+
+  /* ── METRICS ── */
+  .metrics-wrap {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg);
+  }
+  .metrics-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .metric {
+    padding: 32px 20px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .metric:last-child { border-right: 0; }
+  .metric-num {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--night);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .metric-num .v { color: var(--violet); }
+  .metric-label {
+    font-size: 13px;
+    color: var(--slate);
+    font-weight: 400;
+  }
+
+  /* ── SECTION CONTAINER ── */
+  .section {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 96px 24px;
+  }
+
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--violet-p);
+    color: var(--violet);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid rgba(91,63,232,0.12);
+  }
+
+  .section-title {
+    font-size: clamp(30px, 3.2vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    color: var(--night);
+    margin-bottom: 14px;
+  }
+  .section-sub {
+    font-size: 15px;
+    color: var(--slate);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 52px;
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .svc-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    padding: 36px;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .svc-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--violet), var(--violet-l));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .svc-card:hover {
+    border-color: rgba(91,63,232,0.2);
+    box-shadow: 0 12px 40px rgba(91,63,232,0.09);
+    transform: translateY(-3px);
+  }
+  .svc-card:hover::after { transform: scaleX(1); }
+
+  .svc-icon-wrap {
+    width: 44px; height: 44px;
+    background: var(--violet-p);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .svc-num-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--violet);
+    margin-bottom: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .svc-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--night);
+    margin-bottom: 10px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  .svc-desc {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .svc-features { display: flex; flex-direction: column; gap: 9px; }
+  .svc-feat {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--slate);
+    font-weight: 500;
+  }
+  .svc-check {
+    width: 18px; height: 18px;
+    background: var(--violet-p);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--violet);
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-section {
+    background: var(--night);
+    padding: 96px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .projects-section::before {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(91,63,232,0.18) 0%, transparent 65%);
+    top: -200px; right: -150px;
+    pointer-events: none;
+  }
+  .projects-section::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(91,63,232,0.1) 0%, transparent 65%);
+    bottom: -100px; left: -50px;
+    pointer-events: none;
+  }
+
+  .projects-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  .projects-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 44px;
+  }
+
+  .projects-section .section-eyebrow {
+    background: rgba(91,63,232,0.2);
+    border-color: rgba(91,63,232,0.25);
+  }
+  .projects-section .section-title { color: white; margin-bottom: 0; }
+
+  .proj-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .proj-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 36px;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .proj-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(91,63,232,0.07) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .proj-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(91,63,232,0.35);
+    transform: translateY(-3px);
+  }
+  .proj-card:hover::before { opacity: 1; }
+
+  .proj-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .proj-status.live {
+    background: rgba(0,192,127,0.14);
+    color: var(--green);
+  }
+  .proj-status.soon {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.35);
+  }
+  .proj-status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .live .proj-status-dot { background: var(--green); animation: live-pulse 2s infinite; }
+  @keyframes live-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .soon .proj-status-dot { background: rgba(255,255,255,0.25); }
+
+  .proj-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+  .proj-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.48);
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .proj-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 28px;
+  }
+  .proj-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--violet-l);
+    background: rgba(91,63,232,0.12);
+    border: 1px solid rgba(91,63,232,0.2);
+    padding: 3px 9px;
+    border-radius: 5px;
+    letter-spacing: 0.03em;
+  }
+  .proj-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .proj-metas { display: flex; gap: 16px; }
+  .proj-meta-item {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    font-weight: 400;
+  }
+  .proj-meta-item strong { color: rgba(255,255,255,0.65); font-weight: 600; }
+
+  .proj-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--violet-l);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.2s, color 0.2s;
+  }
+  .proj-link:hover { gap: 9px; color: white; }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--violet-w);
+    padding: 96px 24px;
+  }
+  .contact-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+
+  .contact-title {
+    font-size: clamp(34px, 3.8vw, 58px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+    color: var(--night);
+    margin-bottom: 16px;
+  }
+  .contact-text {
+    font-size: 15px;
+    color: var(--slate);
+    line-height: 1.75;
+    margin-bottom: 36px;
+    max-width: 400px;
+  }
+  .contact-email-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .contact-email-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--violet);
+    text-decoration: none;
+    background: white;
+    border: 1px solid rgba(91,63,232,0.18);
+    padding: 13px 24px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(91,63,232,0.1);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .contact-email-btn:hover { box-shadow: 0 7px 24px rgba(91,63,232,0.18); transform: translateY(-2px); }
+
+  .contact-card {
+    background: white;
+    border: 1px solid rgba(91,63,232,0.1);
+    border-radius: 20px;
+    padding: 36px;
+    box-shadow: 0 6px 32px rgba(91,63,232,0.07);
+  }
+  .contact-card-heading {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+  }
+  .contact-props { display: flex; flex-direction: column; }
+  .cp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .cp-row:last-child { border-bottom: 0; }
+  .cp-label-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--slate);
+    font-weight: 500;
+  }
+  .cp-icon-box {
+    width: 24px; height: 24px;
+    background: var(--violet-p);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+  .cp-val-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--night);
+  }
+  .cp-val-text.violet { color: var(--violet); }
+  .cp-val-text.red { color: #E53E3E; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--night);
+    padding: 24px;
+  }
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-logo {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .footer-mark {
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg, var(--violet), var(--violet-l));
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.03em;
+  }
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--violet); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-mark">AG</div>
+      AGcoding
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Get in touch &rarr;</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-orb-1"></div>
+  <div class="hero-orb-2"></div>
+  <div class="hero-inner">
+    <div class="reveal">
+      <div class="hero-pill">
+        <div class="hero-pill-dot">📱</div>
+        Mobile Development Studio
+      </div>
+      <h1 class="hero-headline">
+        Native apps built<br>
+        with <span class="grad">precision</span><br>
+        and craft.
+      </h1>
+      <p class="hero-sub">AGcoding is a lean, experienced team delivering native Android and iOS applications — from concept through to store submission.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Start a project &rarr;</a>
+        <a href="#projects" class="btn-secondary">See our work</a>
+      </div>
+      <div class="hero-tech-row">
+        <span class="tech-label">Built with:</span>
+        <span class="tech-chip">Kotlin</span>
+        <span class="tech-chip">Swift</span>
+        <span class="tech-chip">Android SDK</span>
+        <span class="tech-chip">iOS SDK</span>
+      </div>
+    </div>
+    <div class="reveal" style="transition-delay:0.15s">
+      <div class="hero-visual">
+        <!-- Background phones -->
+        <div class="phone phone-back-l">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-card">
+              <div class="ps-card-label">Expenses</div>
+              <div class="ps-card-val">€ 320</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone phone-back-r">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-card">
+              <div class="ps-card-label">Verified</div>
+              <div class="ps-card-val">14 files</div>
+            </div>
+          </div>
+        </div>
+        <!-- Main phone -->
+        <div class="phone phone-main">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-header">
+              <span class="ps-title">Dashboard</span>
+              <div class="ps-dot"></div>
+            </div>
+            <div class="ps-card">
+              <div class="ps-card-label">App Performance</div>
+              <div class="ps-card-val">98.7%</div>
+              <div class="ps-bar-wrap"><div class="ps-bar" style="width:98%"></div></div>
+            </div>
+            <div class="ps-row">
+              <div class="ps-mini">
+                <div class="ps-mini-label">Platform</div>
+                <div class="ps-mini-val">Android</div>
+              </div>
+              <div class="ps-mini">
+                <div class="ps-mini-label">Build</div>
+                <div class="ps-mini-val" style="color:var(--green)">Native</div>
+              </div>
+            </div>
+            <div class="ps-card">
+              <div class="ps-card-label">Store Status</div>
+              <div class="ps-card-val" style="color:var(--green)">Live ✓</div>
+              <div class="ps-bar-wrap"><div class="ps-bar" style="width:100%"></div></div>
+            </div>
+            <div class="ps-row">
+              <div class="ps-mini">
+                <div class="ps-mini-label">Users</div>
+                <div class="ps-mini-val">Growing</div>
+              </div>
+              <div class="ps-mini">
+                <div class="ps-mini-label">Rating</div>
+                <div class="ps-mini-val" style="color:#FFB800">★ 4.8</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating badges -->
+        <div class="float-badge fb-1">
+          <div class="fb-icon fb-icon-g">✓</div>
+          <div>
+            <div class="fb-main">Live on Play Store</div>
+            <div class="fb-sub">Honestli — verified</div>
+          </div>
+        </div>
+        <div class="float-badge fb-2">
+          <div class="fb-icon fb-icon-v">⚡</div>
+          <div>
+            <div class="fb-main">100% Native</div>
+            <div class="fb-sub">No cross-platform</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics-wrap">
+  <div class="metrics-inner">
+    <div class="metric reveal">
+      <div class="metric-num">2<span class="v">+</span></div>
+      <div class="metric-label">Apps live on store</div>
+    </div>
+    <div class="metric reveal" style="transition-delay:0.06s">
+      <div class="metric-num">100<span class="v">%</span></div>
+      <div class="metric-label">Native development</div>
+    </div>
+    <div class="metric reveal" style="transition-delay:0.12s">
+      <div class="metric-num"><span class="v">E2E</span></div>
+      <div class="metric-label">Full project delivery</div>
+    </div>
+    <div class="metric reveal" style="transition-delay:0.18s">
+      <div class="metric-num">2<span class="v">×</span></div>
+      <div class="metric-label">Platforms supported</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="section" id="services">
+  <div class="reveal">
+    <div class="section-eyebrow">Services</div>
+    <h2 class="section-title">How we work with you</h2>
+    <p class="section-sub">Two ways to engage — both focused on delivering real, high-quality native mobile applications with no cross-platform compromises.</p>
+  </div>
+  <div class="services-grid">
+    <div class="svc-card reveal">
+      <div class="svc-icon-wrap">📱</div>
+      <div class="svc-num-tag">01 / Service</div>
+      <h3 class="svc-title">Full Project<br>Development</h3>
+      <p class="svc-desc">We take on your mobile app from scratch — end-to-end. From requirements and architecture through to store submission. Ideal for startups and businesses that need a complete mobile solution.</p>
+      <div class="svc-features">
+        <div class="svc-feat"><span class="svc-check">✓</span>Requirements &amp; architecture</div>
+        <div class="svc-feat"><span class="svc-check">✓</span>Native Android &amp; iOS development</div>
+        <div class="svc-feat"><span class="svc-check">✓</span>Google Play &amp; App Store submission</div>
+        <div class="svc-feat"><span class="svc-check">✓</span>Post-launch support</div>
+      </div>
+    </div>
+    <div class="svc-card reveal" style="transition-delay:0.1s">
+      <div class="svc-icon-wrap">🤝</div>
+      <div class="svc-num-tag">02 / Service</div>
+      <h3 class="svc-title">Part-time Team<br>Collaboration</h3>
+      <p class="svc-desc">We integrate directly with your existing team, providing dedicated Android or iOS development hours. Extra mobile capacity without the overhead of a full-time hire.</p>
+      <div class="svc-features">
+        <div class="svc-feat"><span class="svc-check">✓</span>Dedicated development hours</div>
+        <div class="svc-feat"><span class="svc-check">✓</span>Seamless team integration</div>
+        <div class="svc-feat"><span class="svc-check">✓</span>Flexible engagement model</div>
+        <div class="svc-feat"><span class="svc-check">✓</span>Android &amp; iOS specialists</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="projects-inner">
+    <div class="projects-head-row reveal">
+      <div>
+        <div class="section-eyebrow">Work</div>
+        <h2 class="section-title">Recent <span class="grad">projects</span></h2>
+      </div>
+    </div>
+    <div class="proj-cards">
+      <div class="proj-card reveal">
+        <div class="proj-status live">
+          <span class="proj-status-dot"></span>
+          Live on Google Play
+        </div>
+        <h3 class="proj-title">Honestli</h3>
+        <p class="proj-desc">A digital verification platform built to combat misinformation. Implements tamper-proof Digital Originals with C2PA metadata and blockchain anchoring.</p>
+        <div class="proj-chips">
+          <span class="proj-chip">Android</span>
+          <span class="proj-chip">Verification</span>
+          <span class="proj-chip">Blockchain</span>
+          <span class="proj-chip">C2PA</span>
+        </div>
+        <div class="proj-footer">
+          <div class="proj-metas">
+            <span class="proj-meta-item">Platform: <strong>Android</strong></span>
+            <span class="proj-meta-item">Status: <strong style="color:var(--green)">Live</strong></span>
+          </div>
+          <a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" class="proj-link" target="_blank">Play Store &rarr;</a>
+        </div>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:0.1s">
+        <div class="proj-status soon">
+          <span class="proj-status-dot"></span>
+          Coming Soon
+        </div>
+        <h3 class="proj-title">Cariboo</h3>
+        <p class="proj-desc">A feature-rich car management app for tracking fuel, expenses, and vehicle costs. Features an interactive statistics dashboard and AI-assisted workflows.</p>
+        <div class="proj-chips">
+          <span class="proj-chip">Android</span>
+          <span class="proj-chip">Productivity</span>
+          <span class="proj-chip">AI-assisted</span>
+          <span class="proj-chip">Dashboard</span>
+        </div>
+        <div class="proj-footer">
+          <div class="proj-metas">
+            <span class="proj-meta-item">Platform: <strong>Android</strong></span>
+            <span class="proj-meta-item">Status: <strong>In dev</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">Contact</div>
+      <h2 class="contact-title">Let's build<br>something <span class="grad">great.</span></h2>
+      <p class="contact-text">Have a project in mind? We support full app delivery or can collaborate directly with your existing team. No fluff — just reliable native mobile development.</p>
+      <div class="contact-email-row">
+        <a href="mailto:agcodinglp@gmail.com" class="contact-email-btn">
+          ✉&nbsp; agcodinglp@gmail.com
+        </a>
+      </div>
+    </div>
+    <div class="contact-card reveal" style="transition-delay:0.15s">
+      <div class="contact-card-heading">What you can expect</div>
+      <div class="contact-props">
+        <div class="cp-row">
+          <span class="cp-label-wrap"><span class="cp-icon-box">📱</span>Approach</span>
+          <span class="cp-val-text violet">Native only</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-label-wrap"><span class="cp-icon-box">🚀</span>Delivery</span>
+          <span class="cp-val-text">End-to-end</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-label-wrap"><span class="cp-icon-box">🔧</span>Engagement</span>
+          <span class="cp-val-text">Flexible</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-label-wrap"><span class="cp-icon-box">✓</span>Platforms</span>
+          <span class="cp-val-text">Android &amp; iOS</span>
+        </div>
+        <div class="cp-row">
+          <span class="cp-label-wrap"><span class="cp-icon-box">⚡</span>Cross-platform</span>
+          <span class="cp-val-text red">Never.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-mark">AG</div>
+      AGcoding — Mobile Studio
+    </div>
+    <div class="footer-copy">&copy; 2026 AGcoding. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07 });
+  reveals.forEach(el => io.observe(el));
+  setTimeout(() => {
+    reveals.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  }, 80);
+</script>
+</body>
+</html>
