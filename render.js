@@ -41,7 +41,20 @@
     var el = metricEls[i];
     if (!el) return;
     el.querySelector('.metric-label').textContent = m.label;
-    // number is kept as static HTML to preserve count-up data-attrs
+    var numEl = el.querySelector('.metric-num');
+    if (!numEl) return;
+    var match = m.number.match(/^(\d+\.?\d*)(.*)$/);
+    if (match) {
+      var num = match[1];
+      var suffix = match[2] || '';
+      numEl.setAttribute('data-count', num);
+      numEl.setAttribute('data-suffix', suffix);
+      numEl.innerHTML = '0' + (suffix ? '<span class="v">' + esc(suffix) + '</span>' : '');
+    } else {
+      numEl.removeAttribute('data-count');
+      numEl.removeAttribute('data-suffix');
+      numEl.innerHTML = '<span class="v">' + esc(m.number) + '</span>';
+    }
   });
 
   // ── Services ──────────────────────────────────────────────
