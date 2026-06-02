@@ -28,10 +28,10 @@ const CONTENT = {
 
   // ── Metrics ─────────────────────────────────────────────
   metrics: [
-    { number: "2+",  label: "Apps live on store" },
+    { number: "1",    label: "App live on Play Store" },
     { number: "100%", label: "Native development" },
     { number: "E2E",  label: "Full project delivery" },
-    { number: "2×",   label: "Platforms supported" },
+    { number: "3",    label: "Platforms supported" },
   ],
 
   // ── Services ────────────────────────────────────────────
@@ -87,8 +87,8 @@ const CONTENT = {
         status: "live",
         status_label: "Live on Google Play",
         title: "Honestli",
-        desc: "A digital verification app built to fight misinformation. We engineered tamper-proof Digital Originals with C2PA metadata and blockchain anchoring — proof that an image is real, baked in at the moment of capture.",
-        chips: ["Android", "Verification", "Blockchain", "C2PA"],
+        desc: "A digital verification app built to fight misinformation. We engineered tamper-proof Digital Originals — proof that an image is real, baked in at the moment of capture.",
+        chips: ["Android", "Verification", "AI-assisted"],
         platform: "Android",
         status_text: "Live",
         link: { label: "Play Store →", url: "https://play.google.com/store/apps/details?id=net.honestli.androidapp" },
@@ -111,7 +111,7 @@ const CONTENT = {
   tech: {
     eyebrow: "Our toolkit",
     heading: "Built with modern <span class='grad'>native tooling</span>",
-    pills: ["Kotlin", "Jetpack Compose", "Swift", "SwiftUI", "Coroutines", "C2PA", "Blockchain anchoring", "REST & GraphQL", "CI / CD", "Firebase"],
+    pills: ["Kotlin", "Jetpack Compose", "Swift", "SwiftUI", "Coroutines", "Claude", "Cursor", "Gemini", "ChatGPT", "REST & GraphQL", "CI / CD", "Firebase"],
   },
 
   // ── Contact ─────────────────────────────────────────────
