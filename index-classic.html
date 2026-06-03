@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AGcoding — Native Mobile App Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="progress"><span id="progressBar"></span></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo"><img id="navLogo" src="assets/logo-ink.png" alt="AGcoding"/></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"><svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg></button>
+      <a href="#contact" class="nav-cta">Get in touch →</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services">Services</a>
+  <a href="#process">Process</a>
+  <a href="#work">Work</a>
+  <a href="#contact">Contact</a>
+  <a href="mailto:agcodinglp@gmail.com" class="mm-mail">agcodinglp@gmail.com</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="orb orb-1" data-parallax="0.12"></div>
+  <div class="orb orb-2" data-parallax="-0.08"></div>
+  <div class="wrap hero-grid">
+    <div data-reveal="up">
+      <div class="pill"><span class="pill-dot"></span>Native mobile app studio</div>
+      <h1>Native apps built<br>with <span class="grad">precision</span><br>and craft.</h1>
+      <p class="hero-sub">AGcoding is a lean, senior team delivering native Android and iOS apps — from first concept through to store launch. No cross-platform shortcuts. Just software built to last.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Start a project →</a>
+        <a href="#work" class="btn-ghost">See our work</a>
+      </div>
+      <div class="hero-tech">
+        <span class="tech-label">Built with:</span>
+        <span class="tchip">Kotlin</span><span class="tchip">Swift</span><span class="tchip">Jetpack Compose</span><span class="tchip">SwiftUI</span>
+      </div>
+    </div>
+    <div data-reveal="scale" style="transition-delay:.12s">
+      <div class="hero-visual" id="heroVisual">
+        <div class="phone phone-bl" data-tilt="14" data-base="rotate(-6deg)" style="transform:rotate(-6deg)">
+          <div class="phone-notch"></div>
+          <div class="phone-screen"><div class="ps-card"><div class="ps-lbl">Expenses</div><div class="ps-val">€ 320</div></div></div>
+        </div>
+        <div class="phone phone-br" data-tilt="14" data-base="rotate(7deg)" style="transform:rotate(7deg)">
+          <div class="phone-notch"></div>
+          <div class="phone-screen"><div class="ps-card"><div class="ps-lbl">Verified</div><div class="ps-val">14 files</div></div></div>
+        </div>
+        <div class="phone phone-main" data-tilt="26" data-base="translateX(-50%)" style="transform:translateX(-50%)">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-head"><span class="ps-title">Dashboard</span><span class="ps-dot"></span></div>
+            <div class="ps-card"><div class="ps-lbl">App performance</div><div class="ps-val">98.7%</div><div class="ps-barw"><div class="ps-bar" style="width:98%"></div></div></div>
+            <div class="ps-row">
+              <div class="ps-mini"><div class="ps-lbl">Platform</div><div class="ps-mini-val">Android</div></div>
+              <div class="ps-mini"><div class="ps-lbl">Build</div><div class="ps-mini-val" style="color:var(--green)">Native</div></div>
+            </div>
+            <div class="ps-card"><div class="ps-lbl">Store status</div><div class="ps-val" style="color:var(--green)">Live ✓</div><div class="ps-barw"><div class="ps-bar" style="width:100%"></div></div></div>
+            <div class="ps-row">
+              <div class="ps-mini"><div class="ps-lbl">Users</div><div class="ps-mini-val">Growing</div></div>
+              <div class="ps-mini"><div class="ps-lbl">Rating</div><div class="ps-mini-val" style="color:#FFB800">★ 4.8</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="float-badge fb-1" data-tilt="-18" data-base="translate(0,0)">
+          <div class="fb-icon fb-icon-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div><div class="fb-main">Live on Play Store</div><div class="fb-sub">Honestli — verified</div></div>
+        </div>
+        <div class="float-badge fb-2" data-tilt="18" data-base="translate(0,0)">
+          <div class="fb-icon fb-icon-v"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div>
+          <div><div class="fb-main">100% Native</div><div class="fb-sub">No cross-platform</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee"><div class="mq-track" id="mqTrack"></div></div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="wrap metrics-grid">
+    <div class="metric" data-reveal="up"><div class="metric-num"></div><div class="metric-label"></div></div>
+    <div class="metric" data-reveal="up" style="transition-delay:.06s"><div class="metric-num"></div><div class="metric-label"></div></div>
+    <div class="metric" data-reveal="up" style="transition-delay:.12s"><div class="metric-num"></div><div class="metric-label"></div></div>
+    <div class="metric" data-reveal="up" style="transition-delay:.18s"><div class="metric-num"></div><div class="metric-label"></div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div data-reveal="up">
+      <div class="eyebrow">Services</div>
+      <h2 class="sec-title">Two ways to work with us</h2>
+      <p class="sec-sub">However you engage, the work is the same: reliable, well-architected native apps, shipped by people who have done it before — and who stay close to the detail.</p>
+    </div>
+    <div class="services-grid">
+      <div class="svc-card" data-reveal="up">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg></div>
+        <div class="svc-tag">01 / Service</div>
+        <h3 class="svc-title">Full project development</h3>
+        <p class="svc-desc">You bring the idea — we build the app. We turn a validated concept into a finished native product: scoping, architecture, development, and launch on both stores. Built for founders who want one team owning the outcome.</p>
+        <div class="svc-feats">
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Scoping &amp; product thinking</div>
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Native Android &amp; iOS development</div>
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Google Play &amp; App Store submission</div>
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Post-launch support &amp; iteration</div>
+        </div>
+      </div>
+      <div class="svc-card" data-reveal="up" style="transition-delay:.1s">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg></div>
+        <div class="svc-tag">02 / Service</div>
+        <h3 class="svc-title">Embedded collaboration</h3>
+        <p class="svc-desc">Already have a team? We plug in as dedicated Android or iOS engineers — to hit a deadline, ship a hard feature, or cover a skills gap. Senior capacity on demand, without the cost and lead time of a full-time hire.</p>
+        <div class="svc-feats">
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Dedicated Android or iOS hours</div>
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Seamless integration with your team</div>
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Flexible, scalable engagement</div>
+          <div class="svc-feat"><span class="svc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Code you'd be happy to inherit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section process-sec" id="process">
+  <div class="wrap">
+    <div data-reveal="up">
+      <div class="eyebrow">Process</div>
+      <h2 class="sec-title">How a project actually goes</h2>
+    </div>
+    <div class="process-grid">
+      <div class="pstep" data-reveal="up"><div class="pn">01</div><h4>Discover</h4><p>We pressure-test the idea, scope the build, and agree on what "done" looks like before a line of code is written.</p></div>
+      <div class="pstep" data-reveal="up" style="transition-delay:.08s"><div class="pn">02</div><h4>Design &amp; architect</h4><p>Screens, flows, and a technical foundation built to scale — so the app stays fast as it grows.</p></div>
+      <div class="pstep" data-reveal="up" style="transition-delay:.16s"><div class="pn">03</div><h4>Build</h4><p>Native Kotlin and Swift, shipped in tight, reviewable increments you can see and steer.</p></div>
+      <div class="pstep" data-reveal="up" style="transition-delay:.24s"><div class="pn">04</div><h4>Launch &amp; support</h4><p>Store submission, release, and the unglamorous work of keeping it stable and improving.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-sec" id="work">
+  <div class="wrap">
+    <div data-reveal="up">
+      <div class="eyebrow">Selected work</div>
+      <h2 class="sec-title">Apps we've <span class="grad">shipped</span></h2>
+    </div>
+    <div class="proj-cards">
+      <div class="proj-card" data-reveal="up">
+        <div class="proj-idx">01</div>
+        <div class="proj-status live"><span class="pdot"></span>Live on Google Play</div>
+        <h3 class="proj-title">Honestli</h3>
+        <p class="proj-desc">A digital verification app built to fight misinformation. We engineered tamper-proof Digital Originals with C2PA metadata and blockchain anchoring — proof that an image is real, baked in at the moment of capture.</p>
+        <div class="proj-chips"><span class="pchip">Android</span><span class="pchip">Verification</span><span class="pchip">Blockchain</span><span class="pchip">C2PA</span></div>
+        <div class="proj-foot">
+          <div class="proj-metas"><span class="pmeta">Platform: <strong>Android</strong></span><span class="pmeta">Status: <strong style="color:var(--green)">Live</strong></span></div>
+          <a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" target="_blank" class="proj-link">Play Store →</a>
+        </div>
+      </div>
+      <div class="proj-card" data-reveal="up" style="transition-delay:.1s">
+        <div class="proj-idx">02</div>
+        <div class="proj-status soon"><span class="pdot"></span>Coming soon</div>
+        <h3 class="proj-title">Cariboo</h3>
+        <p class="proj-desc">A car-management app for tracking fuel, expenses, and the true running cost of a vehicle — wrapped in an interactive statistics dashboard with AI-assisted logging that makes record-keeping almost effortless.</p>
+        <div class="proj-chips"><span class="pchip">Android</span><span class="pchip">Productivity</span><span class="pchip">AI-assisted</span><span class="pchip">Dashboard</span></div>
+        <div class="proj-foot">
+          <div class="proj-metas"><span class="pmeta">Platform: <strong>Android</strong></span><span class="pmeta">Status: <strong>In dev</strong></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="section" id="tech">
+  <div class="wrap">
+    <div data-reveal="up">
+      <div class="eyebrow">Our toolkit</div>
+      <h2 class="sec-title">Built with modern <span class="grad">native tooling</span></h2>
+    </div>
+    <div class="tech-row" data-reveal="up" style="transition-delay:.06s">
+      <span class="tech-pill">Kotlin</span><span class="tech-pill">Jetpack Compose</span><span class="tech-pill">Swift</span><span class="tech-pill">SwiftUI</span><span class="tech-pill">Coroutines</span><span class="tech-pill">C2PA</span><span class="tech-pill">Blockchain anchoring</span><span class="tech-pill">REST &amp; GraphQL</span><span class="tech-pill">CI / CD</span><span class="tech-pill">Firebase</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-sec" id="contact">
+  <div class="wrap contact-grid">
+    <div data-reveal="left">
+      <div class="eyebrow">Contact</div>
+      <h2 class="contact-title">Have something in mind?<br><span class="grad">Let's build it.</span></h2>
+      <p class="contact-text">Tell us what you want to make. We can take the whole thing off your plate, or slot into the team you already have. Either way, you'll talk to the people doing the work.</p>
+      <a href="mailto:agcodinglp@gmail.com" class="contact-email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>agcodinglp@gmail.com</a>
+    </div>
+    <div class="contact-card" data-reveal="right" style="transition-delay:.12s">
+      <div class="cc-head">What you can expect</div>
+      <div class="cp-row"><span class="cp-label"><span class="cp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/></svg></span>Approach</span><span class="cp-val acc">Native only</span></div>
+      <div class="cp-row"><span class="cp-label"><span class="cp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5 3 21l4.5-1.5M12 15l-3-3M15 12 9 6m9.5-1.5a5 5 0 0 1 0 5L12 21l-9-9 6.5-6.5a5 5 0 0 1 5 0z"/></svg></span>Delivery</span><span class="cp-val">Concept → store</span></div>
+      <div class="cp-row"><span class="cp-label"><span class="cp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>Engagement</span><span class="cp-val">Project or embedded</span></div>
+      <div class="cp-row"><span class="cp-label"><span class="cp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Platforms</span><span class="cp-val">Android &amp; iOS</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img src="assets/logo-cream.png" alt="AGcoding"/>
+        <p>A small, senior native mobile team. Android &amp; iOS, from concept to store submission.</p>
+      </div>
+      <div class="foot-links">
+        <div class="foot-col"><h5>Site</h5><a href="#services">Services</a><a href="#process">Process</a><a href="#work">Work</a><a href="#contact">Contact</a></div>
+        <div class="foot-col"><h5>Work</h5><a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" target="_blank">Honestli</a><a href="#work">Cariboo</a></div>
+        <div class="foot-col"><h5>Reach us</h5><a href="mailto:agcodinglp@gmail.com">agcodinglp@gmail.com</a></div>
+      </div>
+    </div>
+    <div class="foot-bottom"><div class="foot-copy">© 2026 AGcoding. All rights reserved.</div><div class="foot-copy">Native Android &amp; iOS · Greece</div></div>
+  </div>
+</footer>
+
+
+
+<!-- Tweaks panel (React) -->
+
+
+
+
+
+
+<script src="content.js?v=3"></script>
+<script src="render.js?v=3"></script>
+<script src="script.js?v=3"></script>
+</body>
+</html>
