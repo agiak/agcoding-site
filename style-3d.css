@@ -537,27 +537,69 @@ footer-3d, .footer-3d {
 /* Initial hidden state handled by GSAP; CSS fallback for no-JS */
 [data-3d-reveal].revealed { opacity: 1 !important; transform: none !important; }
 
-/* ── Responsive ───────────────────────────────────── */
+/* ── Cursor: hide on any touch / coarse-pointer device ── */
+@media (pointer: coarse) {
+  #cursor, #cursor-ring { display: none !important; }
+  body { cursor: auto !important; }
+  a, button { cursor: pointer !important; }
+}
+
+/* ── Tablet & mobile (≤ 900px) ───────────────────── */
 @media (max-width: 900px) {
+  /* Nav */
   .nav-links { display: none; }
   .hamburger { display: block; }
   .nav-cta { display: none; }
-  #nav { padding: 0 24px; }
-  .wrap { padding: 0 24px; }
-  .hero-content { padding: 0 24px; }
+  #nav { padding: 0 20px; }
+
+  /* General layout */
+  .wrap { padding: 0 20px; }
+  .section-3d { padding: 80px 0; }
+
+  /* Hero: push content below the fixed nav (72px) + breathing room */
+  .hero { align-items: flex-start; }
+  .hero-content {
+    padding: 96px 20px 40px;
+    width: 100%;
+  }
+  .hero-h1 { font-size: clamp(38px, 11vw, 64px); }
+  .hero-sub { font-size: 15px; }
+  .hero-tech { flex-wrap: wrap; gap: 8px; }
+  .hero-scroll-hint { bottom: 24px; }
+
+  /* Grids → single column */
   .services-grid-3d,
   .proj-cards-3d,
   .contact-grid-3d { grid-template-columns: 1fr; }
+
+  /* Metrics → 2 columns */
   .metrics-grid-3d { grid-template-columns: 1fr 1fr; }
-  .metric-3d { border-right: none; border-bottom: 1px solid var(--border); }
+  .metric-3d { border-right: none; border-bottom: 1px solid var(--border); padding: 36px 24px; }
+  .metric-num-3d { font-size: clamp(36px, 10vw, 56px); }
+
+  /* Process → 2 columns */
   .process-grid-3d { grid-template-columns: 1fr 1fr; }
-  .foot-top-3d { flex-direction: column; }
-  .cursor, #cursor-ring { display: none; }
-  body { cursor: auto; }
-  a, button { cursor: pointer; }
+
+  /* Services card padding */
+  .svc-card-3d { padding: 36px 24px; }
+
+  /* Footer */
+  .foot-top-3d { flex-direction: column; gap: 32px; }
+  .foot-links-3d { flex-wrap: wrap; gap: 32px; }
+  .foot-bottom-3d { flex-direction: column; gap: 8px; text-align: center; }
 }
+
+/* ── Small mobile (≤ 600px) ──────────────────────── */
 @media (max-width: 600px) {
+  /* Metrics → 1 column */
   .metrics-grid-3d { grid-template-columns: 1fr; }
+
+  /* Process → 1 column */
   .process-grid-3d { grid-template-columns: 1fr; }
-  .section-3d { padding: 80px 0; }
+
+  /* Contact card */
+  .contact-card-3d { padding: 28px 20px; }
+
+  /* Project cards */
+  .proj-card-3d { padding: 32px 20px; }
 }
