@@ -44,29 +44,38 @@ body {
 }
 
 /* ── Custom cursor ────────────────────────────────── */
+/* Dot — snaps instantly, inverts colours under it */
 #cursor {
   position: fixed;
-  width: 10px; height: 10px;
-  background: var(--green);
+  width: 7px; height: 7px;
+  background: #fff;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%,-50%);
-  transition: width .2s, height .2s, background .2s;
+  transform: translate(-50%, -50%);
   mix-blend-mode: difference;
+  transition: transform .15s ease, width .25s ease, height .25s ease;
+  will-change: left, top;
 }
+/* Glow — soft radial blob, no hard edge, lags behind */
 #cursor-ring {
   position: fixed;
-  width: 36px; height: 36px;
-  border: 1.5px solid rgba(0,230,118,0.5);
+  width: 380px; height: 380px;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: transform .12s ease, width .25s, height .25s, border-color .25s;
+  z-index: 9997;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0,230,118,0.055) 0%, transparent 65%);
+  will-change: left, top;
+  /* no border, no transition — JS handles smooth follow */
 }
-body.hovering #cursor { width: 16px; height: 16px; }
-body.hovering #cursor-ring { width: 56px; height: 56px; border-color: var(--green); }
+/* On hover: dot scales up subtly, glow brightens */
+body.hovering #cursor {
+  width: 14px; height: 14px;
+}
+body.hovering #cursor-ring {
+  background: radial-gradient(circle, rgba(0,230,118,0.10) 0%, transparent 55%);
+}
 
 /* ── Progress bar ─────────────────────────────────── */
 .progress {

@@ -9,28 +9,32 @@
   /* ── Custom cursor ──────────────────────────────── */
   var cursor     = document.getElementById('cursor');
   var cursorRing = document.getElementById('cursor-ring');
-  var mx = window.innerWidth/2, my = window.innerHeight/2;
-  var rx = mx, ry = my;
+  var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  var gx = mx, gy = my;  // glow position, lags behind
 
   document.addEventListener('mousemove', function(e) {
     mx = e.clientX; my = e.clientY;
-    if (cursor) { cursor.style.left = mx+'px'; cursor.style.top = my+'px'; }
+    // Dot snaps immediately via CSS left/top
+    if (cursor) {
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    }
   });
 
-  // ring follows with lag
-  (function ringLoop() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
+  // Glow follows with a very smooth, slow lag
+  (function glowLoop() {
+    gx += (mx - gx) * 0.07;
+    gy += (my - gy) * 0.07;
     if (cursorRing) {
-      cursorRing.style.left = rx+'px';
-      cursorRing.style.top  = ry+'px';
+      cursorRing.style.left = gx + 'px';
+      cursorRing.style.top  = gy + 'px';
     }
-    requestAnimationFrame(ringLoop);
+    requestAnimationFrame(glowLoop);
   })();
 
-  document.querySelectorAll('a,button,.tech-pill-3d,.proj-card-3d').forEach(function(el) {
-    el.addEventListener('mouseenter', function(){ document.body.classList.add('hovering'); });
-    el.addEventListener('mouseleave', function(){ document.body.classList.remove('hovering'); });
+  document.querySelectorAll('a, button, .tech-pill-3d, .proj-card-3d, .svc-card-3d').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { document.body.classList.add('hovering'); });
+    el.addEventListener('mouseleave', function() { document.body.classList.remove('hovering'); });
   });
 
   /* ── Progress bar ───────────────────────────────── */
