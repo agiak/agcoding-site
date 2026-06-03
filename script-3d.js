@@ -58,62 +58,170 @@
     var camera = new THREE.PerspectiveCamera(60, W/H, 0.1, 100);
     camera.position.set(0, 0, 6);
 
-    /* ── Floating geometric meshes ── */
-    var meshes = [];
-    var geometries = [
-      new THREE.IcosahedronGeometry(1, 0),
-      new THREE.OctahedronGeometry(1, 0),
-      new THREE.TetrahedronGeometry(1, 0),
-      new THREE.DodecahedronGeometry(0.85, 0),
-    ];
-    var wireMat = new THREE.MeshBasicMaterial({
-      color: 0x00e676, wireframe: true, transparent: true, opacity: 0.35
-    });
-    var solidMat = new THREE.MeshPhongMaterial({
-      color: 0x00e676, transparent: true, opacity: 0.06,
-      shininess: 80,
-    });
-    var light1 = new THREE.PointLight(0x00e676, 2, 15);
+    /* ── Lights ── */
+    var light1 = new THREE.PointLight(0x00e676, 2.5, 18);
     light1.position.set(3, 3, 5);
     scene.add(light1);
-    var light2 = new THREE.PointLight(0x00bcd4, 1, 12);
-    light2.position.set(-3, -2, 4);
+    var light2 = new THREE.PointLight(0x00bcd4, 1.2, 14);
+    light2.position.set(-4, -2, 4);
     scene.add(light2);
+    scene.add(new THREE.AmbientLight(0x00e676, 0.08));
 
-    var positions = [
-      [-3.2, 1.5, -1.5], [3.0, -1.2, -2],
-      [2.2, 2.2, -3], [-2.5, -1.8, -2.5],
-      [0.5, 2.8, -2], [-1.2, -3.0, -1],
+    /* ── Phone builder ── */
+    var meshes = [];
+
+    function makePhone(scale, uiRows, showCard) {
+      var g = new THREE.Group();
+      var green = 0x00e676;
+
+      // Body shell — solid very transparent
+      var bodyGeo = new THREE.BoxGeometry(0.58, 1.18, 0.07);
+      g.add(new THREE.Mesh(bodyGeo, new THREE.MeshPhongMaterial({
+        color: green, transparent: true, opacity: 0.05, shininess: 60
+      })));
+      // Body wireframe
+      g.add(new THREE.Mesh(bodyGeo, new THREE.MeshBasicMaterial({
+        color: green, wireframe: true, transparent: true, opacity: 0.28
+      })));
+
+      // Screen fill
+      var screenGeo = new THREE.PlaneGeometry(0.44, 0.90);
+      g.add(new THREE.Mesh(screenGeo, new THREE.MeshBasicMaterial({
+        color: green, transparent: true, opacity: 0.05, side: THREE.DoubleSide
+      })));
+      // Screen edge
+      var edgePts = [
+        new THREE.Vector3(-0.22,  0.45, 0.042),
+        new THREE.Vector3( 0.22,  0.45, 0.042),
+        new THREE.Vector3( 0.22, -0.45, 0.042),
+        new THREE.Vector3(-0.22, -0.45, 0.042),
+        new THREE.Vector3(-0.22,  0.45, 0.042),
+      ];
+      var edgeGeo = new THREE.BufferGeometry().setFromPoints(edgePts);
+      g.add(new THREE.Line(edgeGeo, new THREE.LineBasicMaterial({
+        color: green, transparent: true, opacity: 0.55
+      })));
+
+      // Camera pill
+      var camGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.001, 16);
+      var cam = new THREE.Mesh(camGeo, new THREE.MeshBasicMaterial({ color: green, transparent: true, opacity: 0.5 }));
+      cam.rotation.x = Math.PI / 2;
+      cam.position.set(0, 0.505, 0.042);
+      g.add(cam);
+
+      // Home bar
+      var barGeo = new THREE.BoxGeometry(0.14, 0.006, 0.001);
+      var bar = new THREE.Mesh(barGeo, new THREE.MeshBasicMaterial({ color: green, transparent: true, opacity: 0.55 }));
+      bar.position.set(0, -0.415, 0.042);
+      g.add(bar);
+
+      // UI rows (status bar + content lines)
+      var rowDefs = uiRows || [
+        { w: 0.32, x: -0.04, y: 0.30, o: 0.55 }, // title line
+        { w: 0.22, x: -0.04, y: 0.20, o: 0.25 }, // subtitle
+        { w: 0.36, x:  0.00, y: 0.08, o: 0.20 },
+        { w: 0.28, x:  0.00, y: 0.00, o: 0.20 },
+        { w: 0.34, x:  0.00, y:-0.08, o: 0.20 },
+      ];
+      rowDefs.forEach(function(r) {
+        var rGeo = new THREE.BoxGeometry(r.w, 0.007, 0.001);
+        var rMesh = new THREE.Mesh(rGeo, new THREE.MeshBasicMaterial({
+          color: green, transparent: true, opacity: r.o
+        }));
+        rMesh.position.set(r.x, r.y, 0.043);
+        g.add(rMesh);
+      });
+
+      // Optional floating card on screen
+      if (showCard) {
+        var cardPts = [
+          new THREE.Vector3(-0.17, -0.14, 0.044),
+          new THREE.Vector3( 0.17, -0.14, 0.044),
+          new THREE.Vector3( 0.17, -0.38, 0.044),
+          new THREE.Vector3(-0.17, -0.38, 0.044),
+          new THREE.Vector3(-0.17, -0.14, 0.044),
+        ];
+        var cardGeo = new THREE.BufferGeometry().setFromPoints(cardPts);
+        g.add(new THREE.Line(cardGeo, new THREE.LineBasicMaterial({
+          color: green, transparent: true, opacity: 0.35
+        })));
+        // metric bar inside card
+        var mGeo = new THREE.BoxGeometry(0.22, 0.006, 0.001);
+        var mMesh = new THREE.Mesh(mGeo, new THREE.MeshBasicMaterial({
+          color: green, transparent: true, opacity: 0.45
+        }));
+        mMesh.position.set(-0.025, -0.24, 0.045);
+        g.add(mMesh);
+        // small metric bar (shorter — like 87%)
+        var mGeo2 = new THREE.BoxGeometry(0.16, 0.006, 0.001);
+        var mMesh2 = new THREE.Mesh(mGeo2, new THREE.MeshBasicMaterial({
+          color: green, transparent: true, opacity: 0.28
+        }));
+        mMesh2.position.set(-0.057, -0.28, 0.045);
+        g.add(mMesh2);
+      }
+
+      g.scale.setScalar(scale || 1);
+      return g;
+    }
+
+    /* ── Place phones in scene ── */
+    var phoneDefs = [
+      // [x, y, z, scale, rotY, rotZ, showCard]
+      [ 3.4,  0.5, -1.2,  1.15,  -0.3,  0.08, true  ],
+      [-3.2,  0.8, -1.5,  0.90,   0.4, -0.10, false ],
+      [ 2.2, -2.0, -2.2,  0.70,  -0.5,  0.20, false ],
+      [-1.6, -2.4, -1.8,  0.80,   0.3,  0.12, true  ],
+      [ 0.2,  2.8, -2.8,  0.60,   0.1, -0.06, false ],
     ];
-    positions.forEach(function(pos, i) {
-      var geo = geometries[i % geometries.length];
-      var group = new THREE.Group();
-      group.add(new THREE.Mesh(geo, solidMat.clone()));
-      group.add(new THREE.Mesh(geo, wireMat.clone()));
-      var s = 0.4 + Math.random() * 0.6;
-      group.scale.setScalar(s);
-      group.position.set(pos[0], pos[1], pos[2]);
-      group.rotation.set(
-        Math.random()*Math.PI*2,
-        Math.random()*Math.PI*2,
-        Math.random()*Math.PI*2
-      );
-      group.userData = {
-        rotSpeed: [(Math.random()-.5)*.008, (Math.random()-.5)*.008, (Math.random()-.5)*.006],
-        floatAmp: 0.15 + Math.random() * 0.15,
-        floatSpeed: 0.5 + Math.random() * 0.5,
+    phoneDefs.forEach(function(d) {
+      var phone = makePhone(d[3], null, d[6]);
+      phone.position.set(d[0], d[1], d[2]);
+      phone.rotation.y = d[4];
+      phone.rotation.z = d[5];
+      phone.userData = {
+        rotSpeed: [(Math.random()-0.5)*0.003, (Math.random()-0.5)*0.005, (Math.random()-0.5)*0.002],
+        floatAmp:   0.12 + Math.random() * 0.12,
+        floatSpeed: 0.35 + Math.random() * 0.4,
         floatOffset: Math.random() * Math.PI * 2,
-        baseY: pos[1],
+        baseY: d[1],
       };
-      scene.add(group);
-      meshes.push(group);
+      scene.add(phone);
+      meshes.push(phone);
     });
 
-    /* ── Particle field ── */
-    var pCount = 180;
+    /* ── Floating code lines (look like source code) ── */
+    var codeGroup = new THREE.Group();
+    var codeDefs = [
+      // [x, y, z, numLines, indent]
+      [-5.5,  1.2, -3.5, 12, 0.3],
+      [ 5.0, -1.0, -4.0, 10, 0.2],
+    ];
+    codeDefs.forEach(function(def) {
+      var lineWidths = [0.55,0.38,0.60,0.28,0.48,0.35,0.52,0.42,0.38,0.58,0.32,0.46];
+      var lineIndents = [0,0.12,0.24,0.24,0.36,0.24,0.12,0.24,0.36,0.12,0,0.12];
+      for (var r = 0; r < def[3]; r++) {
+        var indent = lineIndents[r % lineIndents.length] * def[4] / 0.3;
+        var w = lineWidths[r % lineWidths.length];
+        var pts = [new THREE.Vector3(indent, 0, 0), new THREE.Vector3(indent + w, 0, 0)];
+        var geo = new THREE.BufferGeometry().setFromPoints(pts);
+        var line = new THREE.Line(geo, new THREE.LineBasicMaterial({
+          color: 0x00e676, transparent: true, opacity: 0.10 + Math.random() * 0.08
+        }));
+        line.position.set(def[0], def[1] - r * 0.14, def[2]);
+        codeGroup.add(line);
+      }
+    });
+    scene.add(codeGroup);
+    codeGroup.userData = {
+      floatAmp: 0.08, floatSpeed: 0.22, floatOffset: 0.5, baseY: 0,
+    };
+
+    /* ── Particle field (data stream dots) ── */
+    var pCount = 200;
     var pPositions = new Float32Array(pCount * 3);
     for (var i = 0; i < pCount; i++) {
-      pPositions[i*3]   = (Math.random()-0.5) * 20;
+      pPositions[i*3]   = (Math.random()-0.5) * 22;
       pPositions[i*3+1] = (Math.random()-0.5) * 14;
       pPositions[i*3+2] = (Math.random()-0.5) * 8 - 4;
     }
@@ -146,6 +254,10 @@
       currentY += (targetY - currentY) * 0.04;
       scene.rotation.y = currentX * 0.5;
       scene.rotation.x = currentY * 0.3;
+
+      // float the code line clusters
+      var cu = codeGroup.userData;
+      codeGroup.position.y = Math.sin(t * cu.floatSpeed + cu.floatOffset) * cu.floatAmp;
 
       meshes.forEach(function(m) {
         var u = m.userData;
