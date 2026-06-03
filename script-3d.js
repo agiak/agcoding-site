@@ -59,176 +59,143 @@
     camera.position.set(0, 0, 6);
 
     /* ── Lights ── */
-    var light1 = new THREE.PointLight(0x00e676, 2.5, 18);
-    light1.position.set(3, 3, 5);
-    scene.add(light1);
-    var light2 = new THREE.PointLight(0x00bcd4, 1.2, 14);
-    light2.position.set(-4, -2, 4);
-    scene.add(light2);
-    scene.add(new THREE.AmbientLight(0x00e676, 0.08));
+    var keyLight = new THREE.PointLight(0x00e676, 3, 20);
+    keyLight.position.set(4, 4, 6);
+    scene.add(keyLight);
+    var fillLight = new THREE.PointLight(0x00bcd4, 1.5, 16);
+    fillLight.position.set(-5, -2, 4);
+    scene.add(fillLight);
+    scene.add(new THREE.AmbientLight(0x00e676, 0.06));
 
-    /* ── Phone builder ── */
     var meshes = [];
+    var GREEN = 0x00e676;
+    var TEAL  = 0x00bcd4;
 
-    function makePhone(scale, uiRows, showCard) {
+    /* ── Helper: draw a rect outline ── */
+    function rectLine(w, h, z, color, opacity) {
+      var hw = w/2, hh = h/2;
+      var pts = [
+        new THREE.Vector3(-hw,  hh, z),
+        new THREE.Vector3( hw,  hh, z),
+        new THREE.Vector3( hw, -hh, z),
+        new THREE.Vector3(-hw, -hh, z),
+        new THREE.Vector3(-hw,  hh, z),
+      ];
+      return new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity })
+      );
+    }
+
+    /* ── Helper: horizontal rule ── */
+    function hLine(x0, x1, y, z, color, opacity) {
+      var pts = [new THREE.Vector3(x0,y,z), new THREE.Vector3(x1,y,z)];
+      return new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity })
+      );
+    }
+
+    /* ── Build a floating UI panel ──
+       Think: abstract app screen — a glowing glass card with
+       inner layout lines. No phone chrome, no fake hardware. */
+    function makePanel(w, h, depth, rows) {
       var g = new THREE.Group();
-      var green = 0x00e676;
 
-      // Body shell — solid very transparent
-      var bodyGeo = new THREE.BoxGeometry(0.58, 1.18, 0.07);
-      g.add(new THREE.Mesh(bodyGeo, new THREE.MeshPhongMaterial({
-        color: green, transparent: true, opacity: 0.05, shininess: 60
-      })));
-      // Body wireframe
-      g.add(new THREE.Mesh(bodyGeo, new THREE.MeshBasicMaterial({
-        color: green, wireframe: true, transparent: true, opacity: 0.28
-      })));
+      // Solid fill — barely visible glass
+      g.add(new THREE.Mesh(
+        new THREE.PlaneGeometry(w, h),
+        new THREE.MeshBasicMaterial({ color: GREEN, transparent: true, opacity: 0.03, side: THREE.DoubleSide })
+      ));
 
-      // Screen fill
-      var screenGeo = new THREE.PlaneGeometry(0.44, 0.90);
-      g.add(new THREE.Mesh(screenGeo, new THREE.MeshBasicMaterial({
-        color: green, transparent: true, opacity: 0.05, side: THREE.DoubleSide
-      })));
-      // Screen edge
-      var edgePts = [
-        new THREE.Vector3(-0.22,  0.45, 0.042),
-        new THREE.Vector3( 0.22,  0.45, 0.042),
-        new THREE.Vector3( 0.22, -0.45, 0.042),
-        new THREE.Vector3(-0.22, -0.45, 0.042),
-        new THREE.Vector3(-0.22,  0.45, 0.042),
-      ];
-      var edgeGeo = new THREE.BufferGeometry().setFromPoints(edgePts);
-      g.add(new THREE.Line(edgeGeo, new THREE.LineBasicMaterial({
-        color: green, transparent: true, opacity: 0.55
-      })));
+      // Outer border — crisp line rect
+      g.add(rectLine(w, h, 0, GREEN, 0.5));
 
-      // Camera pill
-      var camGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.001, 16);
-      var cam = new THREE.Mesh(camGeo, new THREE.MeshBasicMaterial({ color: green, transparent: true, opacity: 0.5 }));
-      cam.rotation.x = Math.PI / 2;
-      cam.position.set(0, 0.505, 0.042);
-      g.add(cam);
+      // Subtle inner border offset
+      g.add(rectLine(w - 0.06, h - 0.06, 0.001, GREEN, 0.12));
 
-      // Home bar
-      var barGeo = new THREE.BoxGeometry(0.14, 0.006, 0.001);
-      var bar = new THREE.Mesh(barGeo, new THREE.MeshBasicMaterial({ color: green, transparent: true, opacity: 0.55 }));
-      bar.position.set(0, -0.415, 0.042);
-      g.add(bar);
-
-      // UI rows (status bar + content lines)
-      var rowDefs = uiRows || [
-        { w: 0.32, x: -0.04, y: 0.30, o: 0.55 }, // title line
-        { w: 0.22, x: -0.04, y: 0.20, o: 0.25 }, // subtitle
-        { w: 0.36, x:  0.00, y: 0.08, o: 0.20 },
-        { w: 0.28, x:  0.00, y: 0.00, o: 0.20 },
-        { w: 0.34, x:  0.00, y:-0.08, o: 0.20 },
-      ];
-      rowDefs.forEach(function(r) {
-        var rGeo = new THREE.BoxGeometry(r.w, 0.007, 0.001);
-        var rMesh = new THREE.Mesh(rGeo, new THREE.MeshBasicMaterial({
-          color: green, transparent: true, opacity: r.o
-        }));
-        rMesh.position.set(r.x, r.y, 0.043);
-        g.add(rMesh);
+      // Corner accents — short L-shaped lines at each corner
+      var cSize = 0.12, hw = w/2, hh = h/2;
+      var corners = [[-hw,hh],[hw,hh],[hw,-hh],[-hw,-hh]];
+      corners.forEach(function(c, i) {
+        var sx = c[0] < 0 ? 1 : -1;
+        var sy = c[1] < 0 ? 1 : -1;
+        var pts1 = [new THREE.Vector3(c[0], c[1], 0.002), new THREE.Vector3(c[0]+sx*cSize, c[1], 0.002)];
+        var pts2 = [new THREE.Vector3(c[0], c[1], 0.002), new THREE.Vector3(c[0], c[1]+sy*cSize, 0.002)];
+        g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts1),
+          new THREE.LineBasicMaterial({ color: GREEN, transparent: true, opacity: 0.9 })));
+        g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts2),
+          new THREE.LineBasicMaterial({ color: GREEN, transparent: true, opacity: 0.9 })));
       });
 
-      // Optional floating card on screen
-      if (showCard) {
-        var cardPts = [
-          new THREE.Vector3(-0.17, -0.14, 0.044),
-          new THREE.Vector3( 0.17, -0.14, 0.044),
-          new THREE.Vector3( 0.17, -0.38, 0.044),
-          new THREE.Vector3(-0.17, -0.38, 0.044),
-          new THREE.Vector3(-0.17, -0.14, 0.044),
-        ];
-        var cardGeo = new THREE.BufferGeometry().setFromPoints(cardPts);
-        g.add(new THREE.Line(cardGeo, new THREE.LineBasicMaterial({
-          color: green, transparent: true, opacity: 0.35
-        })));
-        // metric bar inside card
-        var mGeo = new THREE.BoxGeometry(0.22, 0.006, 0.001);
-        var mMesh = new THREE.Mesh(mGeo, new THREE.MeshBasicMaterial({
-          color: green, transparent: true, opacity: 0.45
-        }));
-        mMesh.position.set(-0.025, -0.24, 0.045);
-        g.add(mMesh);
-        // small metric bar (shorter — like 87%)
-        var mGeo2 = new THREE.BoxGeometry(0.16, 0.006, 0.001);
-        var mMesh2 = new THREE.Mesh(mGeo2, new THREE.MeshBasicMaterial({
-          color: green, transparent: true, opacity: 0.28
-        }));
-        mMesh2.position.set(-0.057, -0.28, 0.045);
-        g.add(mMesh2);
+      // Layout content rows
+      var rowDefs = rows || [
+        { x0: -hw+0.12, x1:  0.1,    y: hh-0.18, op: 0.6  }, // heading
+        { x0: -hw+0.12, x1: -0.1,    y: hh-0.28, op: 0.25 }, // subheading
+        { x0: -hw+0.12, x1:  hw-0.14,y: hh-0.45, op: 0.15 }, // body
+        { x0: -hw+0.12, x1:  0.2,    y: hh-0.53, op: 0.15 },
+        { x0: -hw+0.12, x1:  hw-0.14,y: hh-0.61, op: 0.15 },
+      ];
+      rowDefs.forEach(function(r) {
+        g.add(hLine(r.x0, r.x1, r.y, 0.003, GREEN, r.op));
+      });
+
+      // Small stat badge (bottom-right corner area)
+      if (depth > 0) {
+        g.add(rectLine(0.28, 0.14, 0.003, TEAL, 0.3));
+        var badge = new THREE.Group();
+        badge.position.set(hw - 0.24, -hh + 0.18, 0);
+        badge.add(rectLine(0.28, 0.14, 0, TEAL, 0.25));
+        badge.add(hLine(-0.09, 0.09, 0.02, 0, TEAL, 0.5));
+        badge.add(hLine(-0.09, 0.04, -0.04, 0, TEAL, 0.3));
+        g.add(badge);
       }
 
-      g.scale.setScalar(scale || 1);
       return g;
     }
 
-    /* ── Place phones in scene ── */
-    var phoneDefs = [
-      // [x, y, z, scale, rotY, rotZ, showCard]
-      [ 3.4,  0.5, -1.2,  1.15,  -0.3,  0.08, true  ],
-      [-3.2,  0.8, -1.5,  0.90,   0.4, -0.10, false ],
-      [ 2.2, -2.0, -2.2,  0.70,  -0.5,  0.20, false ],
-      [-1.6, -2.4, -1.8,  0.80,   0.3,  0.12, true  ],
-      [ 0.2,  2.8, -2.8,  0.60,   0.1, -0.06, false ],
+    /* ── Place panels ── */
+    //  [x,  y,   z,    w,   h,  rotY,  rotX, scale, hasStats]
+    var panelDefs = [
+      [ 3.6,  0.6, -0.8,  1.6, 2.4,  -0.32,  0.05,  1.0,  true  ],
+      [-3.4,  0.4, -1.2,  1.4, 2.2,   0.38, -0.04,  0.85, false ],
+      [ 2.0, -2.2, -2.0,  1.2, 1.8,  -0.45,  0.10,  0.70, false ],
+      [-1.8, -2.0, -1.6,  1.1, 1.7,   0.28,  0.06,  0.75, true  ],
+      [ 0.0,  2.8, -3.2,  1.8, 2.6,   0.08, -0.05,  0.55, false ],
     ];
-    phoneDefs.forEach(function(d) {
-      var phone = makePhone(d[3], null, d[6]);
-      phone.position.set(d[0], d[1], d[2]);
-      phone.rotation.y = d[4];
-      phone.rotation.z = d[5];
-      phone.userData = {
-        rotSpeed: [(Math.random()-0.5)*0.003, (Math.random()-0.5)*0.005, (Math.random()-0.5)*0.002],
-        floatAmp:   0.12 + Math.random() * 0.12,
-        floatSpeed: 0.35 + Math.random() * 0.4,
+    panelDefs.forEach(function(d) {
+      var panel = makePanel(d[3], d[4], d[8] ? 1 : 0);
+      panel.position.set(d[0], d[1], d[2]);
+      panel.rotation.y = d[5];
+      panel.rotation.x = d[6];
+      panel.scale.setScalar(d[7]);
+      panel.userData = {
+        floatAmp:   0.10 + Math.random() * 0.10,
+        floatSpeed: 0.30 + Math.random() * 0.35,
         floatOffset: Math.random() * Math.PI * 2,
         baseY: d[1],
       };
-      scene.add(phone);
-      meshes.push(phone);
+      scene.add(panel);
+      meshes.push(panel);
     });
 
-    /* ── Floating code lines (look like source code) ── */
-    var codeGroup = new THREE.Group();
-    var codeDefs = [
-      // [x, y, z, numLines, indent]
-      [-5.5,  1.2, -3.5, 12, 0.3],
-      [ 5.0, -1.0, -4.0, 10, 0.2],
-    ];
-    codeDefs.forEach(function(def) {
-      var lineWidths = [0.55,0.38,0.60,0.28,0.48,0.35,0.52,0.42,0.38,0.58,0.32,0.46];
-      var lineIndents = [0,0.12,0.24,0.24,0.36,0.24,0.12,0.24,0.36,0.12,0,0.12];
-      for (var r = 0; r < def[3]; r++) {
-        var indent = lineIndents[r % lineIndents.length] * def[4] / 0.3;
-        var w = lineWidths[r % lineWidths.length];
-        var pts = [new THREE.Vector3(indent, 0, 0), new THREE.Vector3(indent + w, 0, 0)];
-        var geo = new THREE.BufferGeometry().setFromPoints(pts);
-        var line = new THREE.Line(geo, new THREE.LineBasicMaterial({
-          color: 0x00e676, transparent: true, opacity: 0.10 + Math.random() * 0.08
-        }));
-        line.position.set(def[0], def[1] - r * 0.14, def[2]);
-        codeGroup.add(line);
-      }
-    });
-    scene.add(codeGroup);
-    codeGroup.userData = {
-      floatAmp: 0.08, floatSpeed: 0.22, floatOffset: 0.5, baseY: 0,
-    };
-
-    /* ── Particle field (data stream dots) ── */
-    var pCount = 200;
-    var pPositions = new Float32Array(pCount * 3);
-    for (var i = 0; i < pCount; i++) {
-      pPositions[i*3]   = (Math.random()-0.5) * 22;
-      pPositions[i*3+1] = (Math.random()-0.5) * 14;
-      pPositions[i*3+2] = (Math.random()-0.5) * 8 - 4;
+    /* ── Dot grid (depth field) ── */
+    var dotCount = 300;
+    var dotPos   = new Float32Array(dotCount * 3);
+    for (var i = 0; i < dotCount; i++) {
+      dotPos[i*3]   = (Math.random()-0.5) * 24;
+      dotPos[i*3+1] = (Math.random()-0.5) * 16;
+      dotPos[i*3+2] = (Math.random()-0.5) * 10 - 4;
     }
-    var pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-    var pMat = new THREE.PointsMaterial({ color: 0x00e676, size: 0.04, transparent: true, opacity: 0.5 });
-    scene.add(new THREE.Points(pGeo, pMat));
+    var dotGeo = new THREE.BufferGeometry();
+    dotGeo.setAttribute('position', new THREE.BufferAttribute(dotPos, 3));
+    scene.add(new THREE.Points(dotGeo,
+      new THREE.PointsMaterial({ color: GREEN, size: 0.035, transparent: true, opacity: 0.35 })
+    ));
+
+    /* ── Particle field (pCount kept as alias for resize logic) ── */
+    var pCount = dotCount;
+    var pPositions = dotPos;
 
     /* ── Mouse parallax ── */
     var targetX = 0, targetY = 0, currentX = 0, currentY = 0;
@@ -255,15 +222,9 @@
       scene.rotation.y = currentX * 0.5;
       scene.rotation.x = currentY * 0.3;
 
-      // float the code line clusters
-      var cu = codeGroup.userData;
-      codeGroup.position.y = Math.sin(t * cu.floatSpeed + cu.floatOffset) * cu.floatAmp;
-
       meshes.forEach(function(m) {
         var u = m.userData;
-        m.rotation.x += u.rotSpeed[0];
-        m.rotation.y += u.rotSpeed[1];
-        m.rotation.z += u.rotSpeed[2];
+        // panels only gently float — no spin (looks cleaner)
         m.position.y = u.baseY + Math.sin(t * u.floatSpeed + u.floatOffset) * u.floatAmp;
       });
 
@@ -374,18 +335,30 @@
     var themeIcon = document.getElementById('themeIcon');
     var root      = document.documentElement;
     var navLogo   = document.getElementById('navLogo');
-    var sunSVG    = '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>';
-    var moonSVG   = '<path d="M20 14.5A8 8 0 0 1 9.5 4 7 7 0 1 0 20 14.5z"/>';
+    var sunSVG  = '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>';
+    var moonSVG = '<path d="M20 14.5A8 8 0 0 1 9.5 4 7 7 0 1 0 20 14.5z"/>';
+
     function applyTheme(t) {
       root.setAttribute('data-theme', t);
-      if (navLogo) navLogo.src = 'assets/logo-cream.png'; // always cream on dark bg
-      if (themeIcon) themeIcon.innerHTML = t==='dark' ? moonSVG : sunSVG;
+      // logo: cream on dark, ink on light
+      if (navLogo) navLogo.src = t === 'dark' ? 'assets/logo-cream.png' : 'assets/logo-ink.png';
+      if (themeIcon) themeIcon.innerHTML = t === 'dark' ? moonSVG : sunSVG;
+      // tint hero canvas overlay for light mode readability
+      var overlay = document.querySelector('.hero-vignette');
+      if (overlay) {
+        overlay.style.background = t === 'dark'
+          ? 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(6,6,8,0.85) 100%)'
+          : 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(244,244,240,0.80) 100%)';
+      }
       try { localStorage.setItem('ag-theme', t); } catch(e) {}
     }
-    var saved = 'dark'; try { saved = localStorage.getItem('ag-theme') || 'dark'; } catch(e) {}
+
+    var saved = 'dark';
+    try { saved = localStorage.getItem('ag-theme') || 'dark'; } catch(e) {}
     applyTheme(saved);
+
     if (themeBtn) themeBtn.addEventListener('click', function() {
-      applyTheme(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+      applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
   })();
 

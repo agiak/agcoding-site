@@ -4,7 +4,8 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
+:root,
+[data-theme="dark"] {
   --bg:        #060608;
   --bg2:       #0d0d12;
   --bg3:       #12121a;
@@ -16,6 +17,20 @@
   --muted:     rgba(240,240,245,0.45);
   --font:      'Plus Jakarta Sans', sans-serif;
   --mono:      'JetBrains Mono', monospace;
+  --canvas-overlay: rgba(6,6,8,0.15);
+}
+
+[data-theme="light"] {
+  --bg:        #f4f4f0;
+  --bg2:       #eaeae5;
+  --bg3:       #e0e0da;
+  --surface:   rgba(0,0,0,0.03);
+  --border:    rgba(0,0,0,0.09);
+  --green:     #00a854;
+  --green-dim: #007a3d;
+  --text:      #0a0a0f;
+  --muted:     rgba(10,10,15,0.50);
+  --canvas-overlay: rgba(244,244,240,0.55);
 }
 
 html { scroll-behavior: smooth; }
