@@ -29,7 +29,7 @@ const CONTENT = {
   // ── Metrics ─────────────────────────────────────────────
   // number: use digits+suffix for count-up (e.g. "2+", "100%", "3×"), or plain text (e.g. "E2E")
   metrics: [
-    { number: "2+",   label: "Apps live on store" },
+    { number: "1+",   label: "Apps live on store" },
     { number: "100%", label: "Native development" },
     { number: "E2E",  label: "Full project delivery" },
     { number: "3×",   label: "Platforms supported" },
@@ -96,17 +96,6 @@ const CONTENT = {
       },
       {
         idx: "02",
-        status: "live",
-        status_label: "Live on Play Store",
-        title: "Dlive",
-        desc: "A live-streaming platform app built natively for Android, iOS, and a third platform — delivering real-time video, chat, and creator tools with the performance that only native development can provide.",
-        chips: ["Android", "iOS", "Native", "Live Streaming"],
-        platform: "Android · iOS",
-        status_text: "Live",
-        link: null,
-      },
-      {
-        idx: "03",
         status: "soon",
         status_label: "Coming soon",
         title: "Cariboo",
