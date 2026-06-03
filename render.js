@@ -94,39 +94,30 @@
   set('#work .eyebrow', esc(w.eyebrow));
   set('#work .sec-title', w.heading);
 
-  var projCards = document.querySelectorAll('.proj-card');
-  w.projects.forEach(function(proj, i) {
-    var el = projCards[i];
-    if (!el) return;
-    el.querySelector('.proj-title').textContent = proj.title;
-    el.querySelector('.proj-desc').textContent = proj.desc;
-    el.querySelector('.proj-status').innerHTML = '<span class="pdot"></span>' + esc(proj.status_label);
-    el.querySelector('.proj-status').className = 'proj-status ' + proj.status;
-
-    var chips = el.querySelector('.proj-chips');
-    if (chips) chips.innerHTML = proj.chips.map(function(c){ return '<span class="pchip">' + esc(c) + '</span>'; }).join('');
-
-    var metas = el.querySelector('.proj-metas');
-    if (metas) {
+  var projContainer = document.querySelector('.proj-cards');
+  if (projContainer) {
+    projContainer.innerHTML = w.projects.map(function(proj, i) {
+      var delay = i > 0 ? ' style="transition-delay:' + (i * 0.1) + 's"' : '';
       var statusStyle = proj.status === 'live' ? ' style="color:var(--green)"' : '';
-      metas.innerHTML = '<span class="pmeta">Platform: <strong>' + esc(proj.platform) + '</strong></span>' +
-        '<span class="pmeta">Status: <strong' + statusStyle + '>' + esc(proj.status_text) + '</strong></span>';
-    }
-
-    var foot = el.querySelector('.proj-foot');
-    if (foot && proj.link) {
-      var existing = foot.querySelector('.proj-link');
-      if (!existing) {
-        var a = document.createElement('a');
-        a.href = proj.link.url; a.target = '_blank'; a.className = 'proj-link';
-        a.textContent = proj.link.label;
-        foot.appendChild(a);
-      } else {
-        existing.href = proj.link.url;
-        existing.textContent = proj.link.label;
-      }
-    }
-  });
+      var chips = proj.chips.map(function(c){ return '<span class="pchip">' + esc(c) + '</span>'; }).join('');
+      var link = proj.link
+        ? '<a href="' + proj.link.url + '" target="_blank" class="proj-link">' + esc(proj.link.label) + '</a>'
+        : '';
+      return '<div class="proj-card" data-reveal="up"' + delay + '>' +
+        '<div class="proj-idx">' + esc(proj.idx) + '</div>' +
+        '<div class="proj-status ' + proj.status + '"><span class="pdot"></span>' + esc(proj.status_label) + '</div>' +
+        '<h3 class="proj-title">' + esc(proj.title) + '</h3>' +
+        '<p class="proj-desc">' + esc(proj.desc) + '</p>' +
+        '<div class="proj-chips">' + chips + '</div>' +
+        '<div class="proj-foot">' +
+          '<div class="proj-metas">' +
+            '<span class="pmeta">Platform: <strong>' + esc(proj.platform) + '</strong></span>' +
+            '<span class="pmeta">Status: <strong' + statusStyle + '>' + esc(proj.status_text) + '</strong></span>' +
+          '</div>' + link +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
 
   // ── Tech ──────────────────────────────────────────────────
   set('#tech .eyebrow', esc(C.tech.eyebrow));

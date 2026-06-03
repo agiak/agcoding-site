@@ -27,11 +27,12 @@ const CONTENT = {
   },
 
   // ── Metrics ─────────────────────────────────────────────
+  // number: use digits+suffix for count-up (e.g. "2+", "100%", "3×"), or plain text (e.g. "E2E")
   metrics: [
-    { number: "1",    label: "App live on Play Store" },
+    { number: "2+",   label: "Apps live on store" },
     { number: "100%", label: "Native development" },
     { number: "E2E",  label: "Full project delivery" },
-    { number: "3",    label: "Platforms supported" },
+    { number: "3×",   label: "Platforms supported" },
   ],
 
   // ── Services ────────────────────────────────────────────
@@ -70,7 +71,7 @@ const CONTENT = {
     eyebrow: "Process",
     heading: "How a project actually goes",
     steps: [
-      { n: "01", title: "Discover",            desc: "We pressure-test the idea, scope the build, and agree on what "done" looks like before a line of code is written." },
+      { n: "01", title: "Discover",            desc: "We pressure-test the idea, scope the build, and agree on what 'done' looks like before a line of code is written." },
       { n: "02", title: "Design & architect",  desc: "Screens, flows, and a technical foundation built to scale — so the app stays fast as it grows." },
       { n: "03", title: "Build",               desc: "Native Kotlin and Swift, shipped in tight, reviewable increments you can see and steer." },
       { n: "04", title: "Launch & support",    desc: "Store submission, release, and the unglamorous work of keeping it stable and improving." },
@@ -95,6 +96,17 @@ const CONTENT = {
       },
       {
         idx: "02",
+        status: "live",
+        status_label: "Live on Play Store",
+        title: "Dlive",
+        desc: "A live-streaming platform app built natively for Android, iOS, and a third platform — delivering real-time video, chat, and creator tools with the performance that only native development can provide.",
+        chips: ["Android", "iOS", "Native", "Live Streaming"],
+        platform: "Android · iOS",
+        status_text: "Live",
+        link: null,
+      },
+      {
+        idx: "03",
         status: "soon",
         status_label: "Coming soon",
         title: "Cariboo",
