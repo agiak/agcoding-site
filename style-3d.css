@@ -105,7 +105,20 @@ body.hovering #cursor-ring {
 .nav-inner {
   width: 100%; display: flex; align-items: center; justify-content: space-between;
 }
-.nav-logo img { height: 28px; }
+.nav-logo img,
+.foot-brand-3d img {
+  height: 28px;
+  background-color: var(--green);
+  -webkit-mask-image: url("assets/logo-cream.png");
+  mask-image: url("assets/logo-cream.png");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.foot-brand-3d img { width: auto; }
 .nav-links { list-style: none; display: flex; gap: 36px; }
 .nav-links a {
   color: var(--muted); font-size: 13px; font-weight: 500;
