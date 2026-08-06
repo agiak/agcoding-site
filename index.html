@@ -4,29 +4,46 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AGcoding — Native Mobile App Studio</title>
+<meta name="description" content="AGcoding is a lean, senior team delivering native Android and iOS apps — from first concept through to store launch."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style-3d.css"/>
-<!-- Three.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<!-- GSAP + ScrollTrigger -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style-agent.css"/>
+<!-- Set theme before paint to avoid flash -->
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('ag-theme');
+      if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<!-- GSAP + ScrollTrigger (scroll-driven transitions) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+<!-- Animated background: gradient mesh + grid -->
+<div class="bg-field" aria-hidden="true">
+  <div class="mesh mesh-a"></div>
+  <div class="mesh mesh-b"></div>
+  <div class="mesh mesh-c"></div>
+  <div class="grid-overlay"></div>
+  <div class="grain"></div>
+</div>
 
-<!-- Progress bar -->
-<div class="progress"><span id="progressBar"></span></div>
+<!-- Cursor glow (fine-pointer only) -->
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<!-- Scroll progress -->
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
 
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-inner">
-    <a href="#home" class="nav-logo"><img id="navLogo" src="assets/logo-cream.png" alt="AGcoding"/></a>
+    <a href="#home" class="nav-logo"><img src="assets/logo-cream.png" alt="AGcoding"/></a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#process">Process</a></li>
@@ -34,7 +51,11 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-right">
-      <a href="#contact" class="nav-cta">Get in touch →</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a href="#contact" class="nav-cta">Get in touch <span aria-hidden="true">→</span></a>
       <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -50,235 +71,188 @@
 
 <!-- HERO -->
 <section class="hero" id="home">
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-noise"></div>
-  <div class="hero-vignette"></div>
-  <div class="hero-content">
-    <div class="hero-label" id="hero-label">Native mobile app studio</div>
-    <h1 class="hero-h1" id="hero-h1">
-      Native apps built<br>
-      with <em>precision</em><br>
-      and craft.
-    </h1>
-    <p class="hero-sub" id="hero-sub">
-      AGcoding is a lean, senior team delivering native Android and iOS apps — from first concept through to store launch. No cross-platform shortcuts. Just software built to last.
-    </p>
-    <div class="hero-actions">
-      <a href="#contact" class="btn-primary-3d" id="hero-cta-primary">Start a project →</a>
-      <a href="#work" class="btn-ghost-3d" id="hero-cta-ghost">See our work</a>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="hero-label reveal" data-reveal="up">
+        <span class="pulse-dot"></span> Native mobile app studio
+      </div>
+      <h1 class="hero-h1 reveal" data-reveal="up" data-delay="60">
+        Native apps built<br>
+        with <span class="grad">precision</span><br>
+        and craft.
+      </h1>
+      <p class="hero-sub reveal" data-reveal="up" data-delay="120">
+        AGcoding is a lean, senior team delivering native Android and iOS apps — from first concept through to store launch. No cross-platform shortcuts. Just software built to last.
+      </p>
+      <div class="hero-actions reveal" data-reveal="up" data-delay="180">
+        <a href="#contact" class="btn-primary">Start a project <span aria-hidden="true">→</span></a>
+        <a href="#work" class="btn-ghost">See our work</a>
+      </div>
+      <div class="hero-tech reveal" data-reveal="up" data-delay="240">
+        <span class="hero-tech-label">Built with</span>
+        <span class="tchip">Kotlin</span>
+        <span class="tchip">Swift</span>
+        <span class="tchip">Jetpack Compose</span>
+        <span class="tchip">SwiftUI</span>
+      </div>
     </div>
-    <div class="hero-tech" id="hero-tech">
-      <span class="hero-tech-label">Built with:</span>
-      <span class="tchip-3d">Kotlin</span>
-      <span class="tchip-3d">Swift</span>
-      <span class="tchip-3d">Jetpack Compose</span>
-      <span class="tchip-3d">SwiftUI</span>
+
+    <!-- Agent console -->
+    <div class="console reveal" data-reveal="scale" data-delay="140" aria-hidden="true">
+      <div class="console-bar">
+        <span class="cdot"></span><span class="cdot"></span><span class="cdot"></span>
+        <span class="console-title">agcoding — build</span>
+      </div>
+      <div class="console-body" id="consoleBody"></div>
     </div>
   </div>
-  <div class="hero-scroll-hint">
+  <div class="hero-scroll-hint" aria-hidden="true">
     <div class="scroll-line"></div>
     Scroll
   </div>
 </section>
 
 <!-- MARQUEE -->
-<div class="marquee"><div class="mq-track" id="mqTrack"></div></div>
+<div class="marquee" aria-hidden="true"><div class="mq-track" id="mqTrack"></div></div>
 
 <!-- METRICS -->
-<div class="metrics-3d" id="metrics">
-  <div class="wrap metrics-grid-3d">
-    <div class="metric-3d">
-      <div class="metric-num-3d" id="mn-0">0<span class="v">+</span></div>
-      <div class="metric-label-3d">Apps live on store</div>
+<section class="metrics" id="metrics">
+  <div class="wrap metrics-grid">
+    <div class="metric reveal" data-reveal="up">
+      <div class="metric-num" id="mn-0">0<span class="v">+</span></div>
+      <div class="metric-label">Apps live on store</div>
     </div>
-    <div class="metric-3d">
-      <div class="metric-num-3d" id="mn-1">0<span class="v">%</span></div>
-      <div class="metric-label-3d">Native development</div>
+    <div class="metric reveal" data-reveal="up" data-delay="80">
+      <div class="metric-num" id="mn-1">0<span class="v">%</span></div>
+      <div class="metric-label">Native development</div>
     </div>
-    <div class="metric-3d">
-      <div class="metric-num-3d" id="mn-2"><span class="v">E2E</span></div>
-      <div class="metric-label-3d">Full project delivery</div>
+    <div class="metric reveal" data-reveal="up" data-delay="160">
+      <div class="metric-num" id="mn-2"><span class="v">E2E</span></div>
+      <div class="metric-label">Full project delivery</div>
     </div>
-    <div class="metric-3d">
-      <div class="metric-num-3d" id="mn-3">0<span class="v">×</span></div>
-      <div class="metric-label-3d">Platforms supported</div>
+    <div class="metric reveal" data-reveal="up" data-delay="240">
+      <div class="metric-num" id="mn-3">0<span class="v">×</span></div>
+      <div class="metric-label">Platforms supported</div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- SERVICES -->
-<section class="section-3d" id="services">
+<section class="section" id="services">
   <div class="wrap">
-    <div data-3d-reveal="up">
-      <div class="eyebrow-3d">Services</div>
-      <h2 class="sec-title-3d">Two ways to work with us</h2>
-      <p class="sec-sub-3d">However you engage, the work is the same: reliable, well-architected native apps, shipped by people who have done it before — and who stay close to the detail.</p>
+    <div class="reveal" data-reveal="up">
+      <div class="eyebrow">Services</div>
+      <h2 class="sec-title">Two ways to work with us</h2>
+      <p class="sec-sub">However you engage, the work is the same: reliable, well-architected native apps, shipped by people who have done it before — and who stay close to the detail.</p>
     </div>
-    <div class="services-grid-3d" id="services-grid">
-      <div class="svc-card-3d" data-3d-reveal="up">
-        <div class="svc-num-3d">01</div>
-        <div class="svc-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg></div>
-        <div class="svc-tag-3d">01 / Service</div>
-        <h3 class="svc-title-3d">Full project development</h3>
-        <p class="svc-desc-3d">You bring the idea — we build the app. We turn a validated concept into a finished native product: scoping, architecture, development, and launch on both stores.</p>
-        <div class="svc-feats-3d">
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Scoping &amp; product thinking</div>
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Native Android &amp; iOS development</div>
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Google Play &amp; App Store submission</div>
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Post-launch support &amp; iteration</div>
-        </div>
-      </div>
-      <div class="svc-card-3d" data-3d-reveal="up" data-delay="0.1">
-        <div class="svc-num-3d">02</div>
-        <div class="svc-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg></div>
-        <div class="svc-tag-3d">02 / Service</div>
-        <h3 class="svc-title-3d">Embedded collaboration</h3>
-        <p class="svc-desc-3d">Already have a team? We plug in as dedicated Android or iOS engineers — to hit a deadline, ship a hard feature, or cover a skills gap. Senior capacity on demand.</p>
-        <div class="svc-feats-3d">
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Dedicated Android or iOS hours</div>
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Seamless integration with your team</div>
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Flexible, scalable engagement</div>
-          <div class="svc-feat-3d"><span class="svc-check-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Code you'd be happy to inherit</div>
-        </div>
-      </div>
-    </div>
+    <div class="services-grid" id="services-grid"></div>
   </div>
 </section>
 
 <!-- PROCESS -->
-<section class="section-3d process-sec-3d" id="process">
+<section class="section process-sec" id="process">
   <div class="wrap">
-    <div data-3d-reveal="up">
-      <div class="eyebrow-3d">Process</div>
-      <h2 class="sec-title-3d">How a project<br>actually goes</h2>
+    <div class="reveal" data-reveal="up">
+      <div class="eyebrow">Process</div>
+      <h2 class="sec-title">How a project<br>actually goes</h2>
     </div>
-    <div class="process-grid-3d">
-      <div class="pstep-3d">
-        <div class="pstep-line"></div>
-        <span class="pn-3d">01</span>
-        <h4>Discover</h4>
-        <p>We pressure-test the idea, scope the build, and agree on what 'done' looks like before a line of code is written.</p>
-      </div>
-      <div class="pstep-3d">
-        <div class="pstep-line"></div>
-        <span class="pn-3d">02</span>
-        <h4>Design &amp; architect</h4>
-        <p>Screens, flows, and a technical foundation built to scale — so the app stays fast as it grows.</p>
-      </div>
-      <div class="pstep-3d">
-        <div class="pstep-line"></div>
-        <span class="pn-3d">03</span>
-        <h4>Build</h4>
-        <p>Native Kotlin and Swift, shipped in tight, reviewable increments you can see and steer.</p>
-      </div>
-      <div class="pstep-3d">
-        <div class="pstep-line"></div>
-        <span class="pn-3d">04</span>
-        <h4>Launch &amp; support</h4>
-        <p>Store submission, release, and the unglamorous work of keeping it stable and improving.</p>
-      </div>
-    </div>
+    <div class="process-grid" id="process-grid"></div>
   </div>
 </section>
 
 <!-- WORK -->
-<section class="section-3d projects-sec-3d" id="work">
+<section class="section projects-sec" id="work">
   <div class="wrap">
-    <div data-3d-reveal="up">
-      <div class="eyebrow-3d">Selected work</div>
-      <h2 class="sec-title-3d">Apps we've <span class="grad-text">shipped</span></h2>
+    <div class="reveal" data-reveal="up">
+      <div class="eyebrow">Selected work</div>
+      <h2 class="sec-title">Apps we've <span class="grad">shipped</span></h2>
     </div>
-    <div class="proj-cards-3d" id="proj-cards-3d">
-      <!-- populated by render-3d.js -->
-    </div>
+    <div class="proj-cards" id="proj-cards"></div>
   </div>
 </section>
 
 <!-- TECH -->
-<section class="section-3d tech-sec-3d" id="tech">
+<section class="section tech-sec" id="tech">
   <div class="wrap">
-    <div data-3d-reveal="up">
-      <div class="eyebrow-3d">Our toolkit</div>
-      <h2 class="sec-title-3d">Built with modern <span class="grad-text">native tooling</span></h2>
+    <div class="reveal" data-reveal="up">
+      <div class="eyebrow">Our toolkit</div>
+      <h2 class="sec-title">Built with modern <span class="grad">native tooling</span></h2>
     </div>
-    <div class="tech-grid-3d" id="tech-grid-3d" data-3d-reveal="up" data-delay="0.1">
-      <!-- populated by render-3d.js -->
-    </div>
+    <div class="tech-grid" id="tech-grid"></div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section class="section-3d contact-sec-3d" id="contact">
-  <div class="wrap contact-grid-3d">
-    <div data-3d-reveal="left">
-      <div class="eyebrow-3d">Contact</div>
-      <h2 class="contact-title-3d">Have something<br>in mind?<br><span class="grad-text">Let's build it.</span></h2>
-      <p class="contact-text-3d">Tell us what you want to make. We can take the whole thing off your plate, or slot into the team you already have. Either way, you'll talk to the people doing the work.</p>
-      <a href="mailto:agcodinglp@gmail.com" class="contact-email-3d">
+<section class="section contact-sec" id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal" data-reveal="left">
+      <div class="eyebrow">Contact</div>
+      <h2 class="contact-title">Have something<br>in mind?<br><span class="grad">Let's build it.</span></h2>
+      <p class="contact-text">Tell us what you want to make. We can take the whole thing off your plate, or slot into the team you already have. Either way, you'll talk to the people doing the work.</p>
+      <a href="mailto:agcodinglp@gmail.com" class="contact-email">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
         agcodinglp@gmail.com
       </a>
     </div>
-    <div class="contact-card-3d" data-3d-reveal="right" data-delay="0.1">
-      <div class="cc-head-3d">What you can expect</div>
-      <div class="cp-row-3d">
-        <span class="cp-label-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/></svg>Approach</span>
-        <span class="cp-val-3d acc">Native only</span>
+    <div class="contact-card reveal" data-reveal="right" data-delay="100">
+      <div class="cc-head">What you can expect</div>
+      <div class="cp-row">
+        <span class="cp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/></svg>Approach</span>
+        <span class="cp-val acc">Native only</span>
       </div>
-      <div class="cp-row-3d">
-        <span class="cp-label-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5 3 21l4.5-1.5M12 15l-3-3M15 12 9 6m9.5-1.5a5 5 0 0 1 0 5L12 21l-9-9 6.5-6.5a5 5 0 0 1 5 0z"/></svg>Delivery</span>
-        <span class="cp-val-3d">Concept → store</span>
+      <div class="cp-row">
+        <span class="cp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5 3 21l4.5-1.5M12 15l-3-3M15 12 9 6m9.5-1.5a5 5 0 0 1 0 5L12 21l-9-9 6.5-6.5a5 5 0 0 1 5 0z"/></svg>Delivery</span>
+        <span class="cp-val">Concept → store</span>
       </div>
-      <div class="cp-row-3d">
-        <span class="cp-label-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Engagement</span>
-        <span class="cp-val-3d">Project or embedded</span>
+      <div class="cp-row">
+        <span class="cp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Engagement</span>
+        <span class="cp-val">Project or embedded</span>
       </div>
-      <div class="cp-row-3d">
-        <span class="cp-label-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Platforms</span>
-        <span class="cp-val-3d">Android &amp; iOS</span>
+      <div class="cp-row">
+        <span class="cp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Platforms</span>
+        <span class="cp-val">Android &amp; iOS</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<div class="footer-3d">
+<footer class="footer">
   <div class="wrap">
-    <div class="foot-top-3d">
-      <div class="foot-brand-3d">
+    <div class="foot-top">
+      <div class="foot-brand">
         <img src="assets/logo-cream.png" alt="AGcoding"/>
         <p>A small, senior native mobile team.<br>Android &amp; iOS, from concept to store submission.</p>
       </div>
-      <div class="foot-links-3d">
-        <div class="foot-col-3d">
+      <div class="foot-links">
+        <div class="foot-col">
           <h5>Site</h5>
           <a href="#services">Services</a>
           <a href="#process">Process</a>
           <a href="#work">Work</a>
           <a href="#contact">Contact</a>
         </div>
-        <div class="foot-col-3d">
+        <div class="foot-col">
           <h5>Work</h5>
-          <a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" target="_blank">Honestli</a>
-          <a href="#work">Cariboo</a>
+          <a href="https://play.google.com/store/apps/details?id=net.honestli.androidapp" target="_blank" rel="noopener">Honestli</a>
+          <a href="https://play.google.com/store/apps/details?id=com.agcoding.cartrackingapp" target="_blank" rel="noopener">Cariboo</a>
+          <a href="https://play.google.com/store/apps/details?id=com.agcoding.youthtalent" target="_blank" rel="noopener">YouthTalents</a>
         </div>
-        <div class="foot-col-3d">
+        <div class="foot-col">
           <h5>Reach us</h5>
           <a href="mailto:agcodinglp@gmail.com">agcodinglp@gmail.com</a>
         </div>
       </div>
     </div>
-    <div class="foot-bottom-3d">
+    <div class="foot-bottom">
       <div>© 2026 AGcoding. All rights reserved.</div>
       <div>Native Android &amp; iOS · Greece</div>
     </div>
   </div>
-</div>
+</footer>
 
-<!-- Content data + render -->
-<script src="content.js?v=3"></script>
-<script src="render-3d.js"></script>
-<!-- 3D interactions -->
-<script src="script-3d.js"></script>
+<script src="content.js?v=4"></script>
+<script src="render-agent.js?v=1"></script>
+<script src="script-agent.js?v=1"></script>
 </body>
 </html>
