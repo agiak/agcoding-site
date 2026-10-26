@@ -377,7 +377,7 @@ body.cursor-active .cursor-glow { opacity: .7; }
 .pstep p { font-size: 14.5px; color: var(--text-2); }
 
 /* ── Projects ─────────────────────────────────────── */
-.proj-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.proj-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .proj-card {
   position: relative; padding: 30px; border-radius: 20px;
   background: var(--surface); border: 1px solid var(--border);
