@@ -29,7 +29,7 @@ const CONTENT = {
   // ── Metrics ─────────────────────────────────────────────
   // number: use digits+suffix for count-up (e.g. "2+", "100%", "3×"), or plain text (e.g. "E2E")
   metrics: [
-    { number: "3+",   label: "Apps live on store" },
+    { number: "2+",   label: "Apps live on store" },
     { number: "100%", label: "Native development" },
     { number: "E2E",  label: "Full project delivery" },
     { number: "3×",   label: "Platforms supported" },
@@ -104,17 +104,6 @@ const CONTENT = {
         platform: "Android",
         status_text: "Live",
         link: { label: "Play Store →", url: "https://play.google.com/store/apps/details?id=com.agcoding.cartrackingapp" },
-      },
-      {
-        idx: "03",
-        status: "live",
-        status_label: "Live on Google Play",
-        title: "YouthTalents",
-        desc: "A talent-discovery platform for football — connecting players with coaches and scouts. Players build a profile and showcase their game, while coaches and scouts find and follow the talent they're looking for.",
-        chips: ["Android", "Football", "Talent discovery", "Community"],
-        platform: "Android",
-        status_text: "Live",
-        link: { label: "Play Store →", url: "https://play.google.com/store/apps/details?id=com.agcoding.youthtalent" },
       },
     ],
   },
